@@ -24,7 +24,7 @@ using ElectricalProgressive.Content.Block.ETransformator;
 [assembly: ModInfo(
     "Electrical Progressive: Basics",
     "electricalprogressivebasics",
-    Website = "https://git",
+    Website = "https://github.com/tehtelev/ElectricalProgressiveBasics",
     Description = "Brings electricity into the game!",
     Version = "0.9.0",
     Authors = new[] {
