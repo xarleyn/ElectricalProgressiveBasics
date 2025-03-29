@@ -11,14 +11,14 @@ public class BlockEntityEAccumulator : BlockEntity
     private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehavior
     public (EParams, int) Eparams
     {
         get => this.ElectricalProgressive!.Eparams;
         set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehavior
     public EParams[] AllEparams
     {
         get => this.ElectricalProgressive?.AllEparams ?? null;

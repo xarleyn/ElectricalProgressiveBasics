@@ -90,7 +90,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
             // предзагрузка ассетов выключателя
             {
-                var assetLocation = new AssetLocation("electricityaddon:switch-enabled");
+                var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
                 var block = api.World.BlockAccessor.GetBlock(assetLocation);
 
                 enabledSwitchVariant = new BlockVariant(api, block, "enabled");
@@ -504,7 +504,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                             entity.MarkDirty(true);
 
 
-                            var assetLocation = new AssetLocation("electricityaddon:switch-enabled");
+                            var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
                             var block = world.BlockAccessor.GetBlock(assetLocation);
                             var itemStack = new ItemStack(block, stackSize);
                             world.SpawnItemEntity(itemStack, position.ToVec3d());
@@ -663,7 +663,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                     if (stackSize > 0)
                     {
-                        var assetLocation = new AssetLocation("electricityaddon:switch-enabled");
+                        var assetLocation = new AssetLocation("electricalprogressive:switch-enabled");
                         var block = world.BlockAccessor.GetBlock(assetLocation);
                         var itemStack = new ItemStack(block, stackSize);
                         world.SpawnItemEntity(itemStack, pos.ToVec3d());

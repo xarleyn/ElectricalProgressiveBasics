@@ -356,15 +356,15 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
-        tree.SetFloat("electricityaddon:powerRequest", powerRequest);
-        tree.SetFloat("electricityaddon:powerReceive", powerReceive);
+        tree.SetFloat("electricalprogressive:powerRequest", powerRequest);
+        tree.SetFloat("electricalprogressive:powerReceive", powerReceive);
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
-        powerRequest = tree.GetFloat("electricityaddon:powerRequest");
-        powerReceive = tree.GetFloat("electricityaddon:powerReceive");
+        powerRequest = tree.GetFloat("electricalprogressive:powerRequest");
+        powerReceive = tree.GetFloat("electricalprogressive:powerReceive");
     }
 
 

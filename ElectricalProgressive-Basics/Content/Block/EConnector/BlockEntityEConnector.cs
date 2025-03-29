@@ -6,13 +6,13 @@ using Vintagestory.API.Common;
 namespace ElectricalProgressive.Content.Block.EConnector;
 
 public class BlockEntityEConnector : BlockEntityECable {
-    private BEBehaviorElectricalProgressive? ElectricityAddon => GetBehavior<BEBehaviorElectricalProgressive>();
+    private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
 
     public override void OnBlockPlaced(ItemStack? byItemStack = null) {
         base.OnBlockPlaced(byItemStack);
 
-        var electricity = this.ElectricityAddon;
+        var electricity = this.ElectricalProgressive;
 
         if (electricity != null) {
             electricity.Connection = Facing.AllAll;
@@ -29,22 +29,22 @@ public class BlockEntityEConnector : BlockEntityECable {
 
 
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public (EParams, int) Eparams
     {
-        get => this.ElectricityAddon!.Eparams;
-        set => this.ElectricityAddon!.Eparams = value;
+        get => this.ElectricalProgressive!.Eparams;
+        set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public EParams[] AllEparams
     {
-        get => this.ElectricityAddon?.AllEparams ?? null;
+        get => this.ElectricalProgressive?.AllEparams ?? null;
         set
         {
-            if (this.ElectricityAddon != null)
+            if (this.ElectricalProgressive != null)
             {
-                this.ElectricityAddon.AllEparams = value;
+                this.ElectricalProgressive.AllEparams = value;
             }
         }
     }

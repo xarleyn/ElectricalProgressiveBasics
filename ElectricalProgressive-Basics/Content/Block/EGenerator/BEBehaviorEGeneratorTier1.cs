@@ -289,15 +289,15 @@ public class BEBehaviorEGeneratorTier1 : BEBehaviorMPBase, IElectricProducer
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
-        tree.SetFloat("electricityaddon:powerOrder", powerOrder);
-        tree.SetFloat("electricityaddon:powerGive", powerGive);
+        tree.SetFloat("electricalprogressive:powerOrder", powerOrder);
+        tree.SetFloat("electricalprogressive:powerGive", powerGive);
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
-        powerOrder = tree.GetFloat("electricityaddon:powerOrder");
-        powerGive = tree.GetFloat("electricityaddon:powerGive");
+        powerOrder = tree.GetFloat("electricalprogressive:powerOrder");
+        powerGive = tree.GetFloat("electricalprogressive:powerGive");
     }
 
 

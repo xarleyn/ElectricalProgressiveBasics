@@ -13,7 +13,7 @@ public class BlockEntityEGenerator : BlockEntity
     private Facing facing = Facing.None;
 
 
-    private BEBehaviorElectricalProgressive? ElectricityAddon => GetBehavior<BEBehaviorElectricalProgressive>();
+    private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
     public Facing Facing
     {
@@ -22,28 +22,28 @@ public class BlockEntityEGenerator : BlockEntity
         {
             if (value != this.facing)
             {
-                this.ElectricityAddon.Connection =
+                this.ElectricalProgressive.Connection =
                     FacingHelper.FullFace(this.facing = value);
             }
         }
     }
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public (EParams, int) Eparams
     {
-        get => this.ElectricityAddon!.Eparams;
-        set => this.ElectricityAddon!.Eparams = value;
+        get => this.ElectricalProgressive!.Eparams;
+        set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public EParams[] AllEparams
     {
-        get => this.ElectricityAddon?.AllEparams ?? null;
+        get => this.ElectricalProgressive?.AllEparams ?? null;
         set
         {
-            if (this.ElectricityAddon != null)
+            if (this.ElectricalProgressive != null)
             {
-                this.ElectricityAddon.AllEparams = value;
+                this.ElectricalProgressive.AllEparams = value;
             }
         }
     }
@@ -53,7 +53,7 @@ public class BlockEntityEGenerator : BlockEntity
     {
         base.ToTreeAttributes(tree);
 
-        tree.SetBytes("electricityaddon:facing", SerializerUtil.Serialize(this.facing));
+        tree.SetBytes("electricalprogressive:facing", SerializerUtil.Serialize(this.facing));
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -62,7 +62,7 @@ public class BlockEntityEGenerator : BlockEntity
 
         try
         {
-            this.facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricityaddon:facing"));
+            this.facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:facing"));
         }
         catch (Exception exception)
         {

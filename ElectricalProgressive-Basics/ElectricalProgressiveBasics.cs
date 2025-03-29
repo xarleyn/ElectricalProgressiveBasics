@@ -22,7 +22,7 @@ using ElectricalProgressive.Content.Block.ETransformator;
 [assembly: ModDependency("game", "1.20.0")]
 [assembly: ModDependency("electricalprogressivecore", "0.9.0")]
 [assembly: ModInfo(
-    "ElectricalProgressiveBasics",
+    "Electrical Progressive: Basics",
     "electricalprogressivebasics",
     Website = "https://git",
     Description = "Brings electricity into the game!",

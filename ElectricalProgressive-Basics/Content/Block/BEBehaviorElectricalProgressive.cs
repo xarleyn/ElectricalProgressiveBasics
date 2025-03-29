@@ -268,11 +268,11 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     {
         base.ToTreeAttributes(tree);
 
-        tree.SetBytes("electricityaddon:connection", SerializerUtil.Serialize(this.connection));
-        tree.SetBytes("electricityaddon:interruption", SerializerUtil.Serialize(this.interruption));
+        tree.SetBytes("electricalprogressive:connection", SerializerUtil.Serialize(this.connection));
+        tree.SetBytes("electricalprogressive:interruption", SerializerUtil.Serialize(this.interruption));
 
         //массив массивов приходится сохранять через newtonsoftjson
-        tree.SetBytes("electricityaddon:allEparams", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.allEparams)));
+        tree.SetBytes("electricalprogressive:allEparams", Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.allEparams)));
         
     }
 
@@ -280,11 +280,11 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
 
-        var connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricityaddon:connection"));
-        var interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricityaddon:interruption"));
+        var connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:connection"));
+        var interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:interruption"));
 
         //массив массивов приходится считывать через newtonsoftjson
-        var AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes("electricityaddon:allEparams")));
+        var AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes("electricalprogressive:allEparams")));
 
         if (connection != this.connection || interruption != this.interruption)
         {

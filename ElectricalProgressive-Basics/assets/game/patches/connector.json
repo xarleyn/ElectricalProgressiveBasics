@@ -3,7 +3,7 @@
     "file": "game:blocktypes/metal/metalblock",
     "path": "/entityBehaviors",
     "op": "add",
-    "value": [{"name":  "ElectricityAddon"}]
+    "value": [{"name":  "ElectricalProgressive"}]
   },
   {
     "file": "game:blocktypes/metal/metalblock",

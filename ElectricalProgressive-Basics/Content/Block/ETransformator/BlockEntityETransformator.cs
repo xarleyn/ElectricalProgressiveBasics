@@ -8,25 +8,25 @@ namespace ElectricalProgressive.Content.Block.ETransformator;
 
 public class BlockEntityETransformator : BlockEntity
 {
-    private BEBehaviorElectricalProgressive? ElectricityAddon => GetBehavior<BEBehaviorElectricalProgressive>();
+    private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public (EParams, int) Eparams
     {
-        get => this.ElectricityAddon!.Eparams;
-        set => this.ElectricityAddon!.Eparams = value;
+        get => this.ElectricalProgressive!.Eparams;
+        set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //передает значения из Block в BEBehaviorElectricityAddon
+    //передает значения из Block в BEBehaviorElectricalProgressive
     public EParams[] AllEparams
     {
-        get => this.ElectricityAddon?.AllEparams ?? null;
+        get => this.ElectricalProgressive?.AllEparams ?? null;
         set
         {
-            if (this.ElectricityAddon != null)
+            if (this.ElectricalProgressive != null)
             {
-                this.ElectricityAddon.AllEparams = value;
+                this.ElectricalProgressive.AllEparams = value;
             }
         }
     }
@@ -41,8 +41,8 @@ public class BlockEntityETransformator : BlockEntity
         var maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack!.Block, "maxCurrent", 5.0F);
         var isolated = MyMiniLib.GetAttributeBool(byItemStack!.Block, "isolated", false);
 
-        this.ElectricityAddon!.Connection = Facing.DownAll;
-        this.ElectricityAddon.Eparams = (
+        this.ElectricalProgressive!.Connection = Facing.DownAll;
+        this.ElectricalProgressive.Eparams = (
             new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated),
             FacingHelper.Faces(Facing.DownAll).First().Index);
 

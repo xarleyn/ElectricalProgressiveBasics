@@ -9,36 +9,36 @@ namespace ElectricalProgressive.Content.Block.ECable
     public class BlockEntityECable : BlockEntity {
         private Facing switches = Facing.None;
 
-        private BEBehaviorElectricalProgressive? ElectricityAddon => GetBehavior<BEBehaviorElectricalProgressive>();
+        private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
         public Facing Connection
         {
-            get => this.ElectricityAddon?.Connection ?? Facing.None;
+            get => this.ElectricalProgressive?.Connection ?? Facing.None;
             set
             {
-                if (this.ElectricityAddon != null)
+                if (this.ElectricalProgressive != null)
                 {
-                    this.ElectricityAddon.Connection = value;
+                    this.ElectricalProgressive.Connection = value;
                 }
             }
         }
 
-        //передает значения из Block в BEBehaviorElectricityAddon
+        //передает значения из Block в BEBehaviorElectricalProgressive
         public (EParams, int) Eparams
         {
-            get => this.ElectricityAddon?.Eparams ?? default((EParams, int));
-            set => this.ElectricityAddon!.Eparams = value;
+            get => this.ElectricalProgressive?.Eparams ?? default((EParams, int));
+            set => this.ElectricalProgressive!.Eparams = value;
         }
 
-        //передает значения из Block в BEBehaviorElectricityAddon
+        //передает значения из Block в BEBehaviorElectricalProgressive
         public EParams[] AllEparams
         {
-            get => this.ElectricityAddon?.AllEparams ?? null;
+            get => this.ElectricalProgressive?.AllEparams ?? null;
             set
             {
-                if (this.ElectricityAddon != null)
+                if (this.ElectricalProgressive != null)
                 {
-                    this.ElectricityAddon.AllEparams = value;
+                    this.ElectricalProgressive.AllEparams = value;
                 }
             }
         }
@@ -46,25 +46,25 @@ namespace ElectricalProgressive.Content.Block.ECable
 
         public Facing Switches {
             get => this.switches;
-            set => this.ElectricityAddon!.Interruption &= this.switches = value;
+            set => this.ElectricalProgressive!.Interruption &= this.switches = value;
         }
 
         public Facing SwitchesState {
-            get => ~this.ElectricityAddon!.Interruption;
-            set => this.ElectricityAddon!.Interruption = this.switches & ~value;
+            get => ~this.ElectricalProgressive!.Interruption;
+            set => this.ElectricalProgressive!.Interruption = this.switches & ~value;
         }
 
         public override void ToTreeAttributes(ITreeAttribute tree) {
             base.ToTreeAttributes(tree);
 
-            tree.SetBytes("electricityaddon:switches", SerializerUtil.Serialize(this.switches));
+            tree.SetBytes("electricalprogressive:switches", SerializerUtil.Serialize(this.switches));
         }
 
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve) {
             base.FromTreeAttributes(tree, worldAccessForResolve);
 
             try {
-                this.switches = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricityaddon:switches"));
+                this.switches = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:switches"));
             }
             catch (Exception exception) {
                 this.Api?.Logger.Error(exception.ToString());

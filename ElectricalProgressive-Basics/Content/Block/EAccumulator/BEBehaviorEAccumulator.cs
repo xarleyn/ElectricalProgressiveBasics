@@ -105,13 +105,13 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
-        tree.SetFloat("electricityaddon:capacity", capacity);
+        tree.SetFloat("electricalprogressive:capacity", capacity);
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
-        capacity = tree.GetFloat("electricityaddon:capacity");
+        capacity = tree.GetFloat("electricalprogressive:capacity");
     }
 
 
