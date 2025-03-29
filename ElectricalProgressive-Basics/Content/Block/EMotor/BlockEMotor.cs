@@ -158,6 +158,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
                 var block = clientApi.World.BlockAccessor.GetBlockEntity(pos).Block;
 
                 clientApi.Tesselator.TesselateBlock(block, out meshData);
+                clientApi.TesselatorManager.ThreadDispose(); //обязательно
 
                 if ((facing & Facing.NorthEast) != 0)
                 {
