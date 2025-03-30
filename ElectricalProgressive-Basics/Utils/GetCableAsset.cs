@@ -9,7 +9,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
 namespace ElectricalProgressive.Utils
-{
+{ 
     class GetCableAsset
     {
         /// <summary>
