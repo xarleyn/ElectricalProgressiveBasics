@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ElectricalProgressive.Utils;
@@ -72,12 +72,12 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
         return base.TryPlaceBlock(world, byPlayer, itemstack, blockSel, ref failureCode);
     }
 
-    //ставим блок
+    //СЃС‚Р°РІРёРј Р±Р»РѕРє
     public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel,
         ItemStack byItemStack)
     {
 
-        // если блок сгорел, то не ставим
+        // РµСЃР»Рё Р±Р»РѕРє СЃРіРѕСЂРµР», С‚Рѕ РЅРµ СЃС‚Р°РІРёРј
         if (byItemStack.Block.Variant["type"] == "burned")
         {
             return false;
@@ -91,9 +91,9 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
             world.BlockAccessor.GetBlockEntity(blockSel.Position) is BlockEntityEMotor entity
         )
         {
-            entity.Facing = facing;                             //сообщаем направление
+            entity.Facing = facing;                             //СЃРѕРѕР±С‰Р°РµРј РЅР°РїСЂР°РІР»РµРЅРёРµ
 
-            //задаем параметры блока/проводника
+            //Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ Р±Р»РѕРєР°/РїСЂРѕРІРѕРґРЅРёРєР°
             var voltage = MyMiniLib.GetAttributeInt(this, "voltage", 32);
             var maxCurrent = MyMiniLib.GetAttributeFloat(this, "maxCurrent", 5.0F);
             var isolated = MyMiniLib.GetAttributeBool(this, "isolated", false);
@@ -149,8 +149,8 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
            )
         {
 
-            var facing = entity.Facing;   //куда смотрит генератор
-            string code = entity.Block.Code; //код блока
+            var facing = entity.Facing;   //РєСѓРґР° СЃРјРѕС‚СЂРёС‚ РіРµРЅРµСЂР°С‚РѕСЂ
+            string code = entity.Block.Code; //РєРѕРґ Р±Р»РѕРєР°
 
             if (!BlockEMotor.MeshData.TryGetValue((facing, code), out var meshData))
             {
@@ -158,7 +158,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
                 var block = clientApi.World.BlockAccessor.GetBlockEntity(pos).Block;
 
                 clientApi.Tesselator.TesselateBlock(block, out meshData);
-                clientApi.TesselatorManager.ThreadDispose(); //обязательно
+                //clientApi.TesselatorManager.ThreadDispose(); //РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ?
 
                 if ((facing & Facing.NorthEast) != 0)
                 {
@@ -293,7 +293,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
 
 
     /// <summary>
-    /// Получение информации о предмете в инвентаре
+    /// РџРѕР»СѓС‡РµРЅРёРµ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРµРґРјРµС‚Рµ РІ РёРЅРІРµРЅС‚Р°СЂРµ
     /// </summary>
     /// <param name="inSlot"></param>
     /// <param name="dsc"></param>

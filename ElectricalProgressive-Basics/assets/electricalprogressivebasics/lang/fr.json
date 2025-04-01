@@ -1,0 +1,190 @@
+﻿{
+  "block-emotor-tier1-*": "Moteur",
+  "block-emotor-tier1-burned": "Moteur (Brûlé)",
+
+  "block-emotor-tier2-*": "Moteur amélioré",
+  "block-emotor-tier2-burned": "Moteur amélioré (Brûlé)",
+
+  "block-emotor-tier3-*": "Moteur haute performance",
+  "block-emotor-tier3-burned": "Moteur haute performance (Brûlé)",
+
+  "block-egenerator-tier1-*": "Générateur",
+  "block-egenerator-tier1-burned": "Générateur (Brûlé)",
+
+  "block-egenerator-tier2-*": "Générateur amélioré",
+  "block-egenerator-tier2-burned": "Générateur amélioré (Brûlé)",
+
+  "block-egenerator-tier3-*": "Générateur haute performance",
+  "block-egenerator-tier3-burned": "Générateur haute performance (Brûlé)",
+
+  "block-transformator-*": "Transformateur",
+  "block-transformator-burned-south": "Transformateur (Brûlé)",
+
+  "block-accumulator-tier1-*": "Batterie (32V)",
+  "block-accumulator-tier1-burned": "Batterie (32V) (Brûlé)",
+
+  "block-accumulator-tier2-*": "Batterie (128V)",
+  "block-accumulator-tier2-burned": "Batterie (128V) (Brûlé)",
+
+  // 32V
+  "block-ecable-32v-copper-*-part": "Câble en cuivre (32V)",
+  "block-ecable-32v-silver-*-part": "Câble en argent  (32V)",
+  "block-ecable-32v-lead-*-part": "Câble de plomb (32V)",
+  "block-ecable-32v-gold-*-part": "Câble en or (32V)",
+  "block-ecable-32v-steel-*-part": "Câble en acier (32V)",
+  "block-ecable-32v-iron-*-part": "Câble en fer (32V)",
+  "block-ecable-32v-tinbronze-*-part": "Câble en bronze (32V)",
+  "block-ecable-32v-brass-*-part": "Câble en laiton (32V)",
+  "block-ecable-32v-electrum-*-part": "Câble en Electrum (32V)",
+
+  // 128V
+  "block-ecable-128v-copper-*-part": "Câble en cuivre (128V)",
+  "block-ecable-128v-silver-*-part": "Câble en argent (128V)",
+  "block-ecable-128v-lead-*-part": "Câble de plomb (128V)",
+  "block-ecable-128v-gold-*-part": "Câble en or (128V)",
+  "block-ecable-128v-steel-*-part": "Câble en acier (128V)",
+  "block-ecable-128v-iron-*-part": "Câble en fer (128V)",
+  "block-ecable-128v-tinbronze-*-part": "Câble en bronze (128V)",
+  "block-ecable-128v-brass-*-part": "Câble en laiton (128V)",
+  "block-ecable-128v-electrum-*-part": "Câble en Electrum (128V)",
+
+  // 32V
+  "block-ecable-32v-copper-*-isolated": "Câble en cuivre isolé (32V)",
+  "block-ecable-32v-silver-*-isolated": "Câble en argent isolé (32V)",
+  "block-ecable-32v-lead-*-isolated": "Câble de plomb isolé (32V)",
+  "block-ecable-32v-gold-*-isolated": "Câble en or isolé (32V)",
+  "block-ecable-32v-steel-*-isolated": "Câble en acier isolé (32V)",
+  "block-ecable-32v-iron-*-isolated": "Câble en fer isolé (32V)",
+  "block-ecable-32v-tinbronze-*-isolated": "Câble en bronze isolé (32V)",
+  "block-ecable-32v-brass-*-isolated": "Câble en laiton isolé (32V)",
+  "block-ecable-32v-electrum-*-isolated": "Câble en Electrum isolé (32V)",
+
+  // 128V
+  "block-ecable-128v-copper-*-isolated": "Câble en cuivre isolé (128V)",
+  "block-ecable-128v-silver-*-isolated": "Câble en argent isolé (128V)",
+  "block-ecable-128v-lead-*-isolated": "Câble de plomb isolé (128V)",
+  "block-ecable-128v-gold-*-isolated": "Câble en or isolé (128V)",
+  "block-ecable-128v-steel-*-isolated": "Câble en acier isolé (128V)",
+  "block-ecable-128v-iron-*-isolated": "Câble en fer isolé (128V)",
+  "block-ecable-128v-tinbronze-*-isolated": "Câble en bronze isolé (128V)",
+  "block-ecable-128v-brass-*-isolated": "Câble en laiton isolé (128V)",
+  "block-ecable-128v-electrum-*-isolated": "Câble en Electrum isolé (128V)",
+
+  // 32V
+  "block-ecable-32v-copper-*-burned": "Câble en cuivre brûlé (32V)",
+  "block-ecable-32v-silver-*-burned": "Câble en argent brûlé (32V)",
+  "block-ecable-32v-lead-*-burned": "Câble de plomb brûlé (32V)",
+  "block-ecable-32v-gold-*-burned": "Câble en or brûlé (32V)",
+  "block-ecable-32v-steel-*-burned": "Câble en acier brûlé (32V)",
+  "block-ecable-32v-iron-*-burned": "Câble en fer brûlé (32V)",
+  "block-ecable-32v-tinbronze-*-burned": "Câble en bronze brûlé (32V)",
+  "block-ecable-32v-brass-*-burned": "Câble en laiton brûlé (32V)",
+  "block-ecable-32v-electrum-*-burned": "Câble en Electrum brûlé (32V)",
+
+  // 128V
+  "block-ecable-128v-copper-*-burned": "Câble en cuivre brûlé (128V)",
+  "block-ecable-128v-silver-*-burned": "Câble en argent brûlé (128V)",
+  "block-ecable-128v-lead-*-burned": "Câble de plomb brûlé (128V)",
+  "block-ecable-128v-gold-*-burned": "Câble en or brûlé (128V)",
+  "block-ecable-128v-steel-*-burned": "Câble en acier brûlé (128V)",
+  "block-ecable-128v-iron-*-burned": "Câble en fer brûlé (128V)",
+  "block-ecable-128v-tinbronze-*-burned": "Câble en bronze brûlé (128V)",
+  "block-ecable-128v-brass-*-burned": "Câble en laiton brûlé (128V)",
+  "block-ecable-128v-electrum-*-burned": "Câble en Electrum brûlé (128V)",
+
+  "block-switch-*": "Interrupteur manuel",
+
+  "item-coil": "Bobine de cuivre",
+
+  "item-engineshaft": "Rotor",
+
+  "game:tabname-electricity": "Électricité",
+
+  "block-handbooktitle-accumulator-tier1": "Usage",
+  "block-handbooktext-accumulator-tier1": "Permet de stocker l'énergie électrique.<br>Une batterie chargée peut être transportée si nécessaire.",
+
+  "block-handbooktitle-accumulator-tier2": "Usage",
+  "block-handbooktext-accumulator-tier2": "Permet de stocker l'énergie électrique. Une version plus grande que la version standard. <a href=\"handbooksearch:\/\/battery\">batterie</a>.<br>Une batterie chargée peut être transportée, mais uniquement dans la fente du sac.",
+
+  "block-handbooktitle-ecable": "Usage",
+  "block-handbooktext-ecable": "Utilisé pour transmettre de l'énergie électrique sur une distance.",
+
+  "block-handbooktitle-switch": "Usage",
+  "block-handbooktext-switch": "Permet de couper un circuit électrique. Installé sur un câble. Cliquez pour activer/désactiver.",
+
+  "block-handbooktitle-transformator": "Usage",
+  "block-handbooktext-transformator": "Convertit l'énergie électrique d'une tension à une autre. Connectez des câbles ou des appareils à deux bornes du transformateur!<br>Rapport de transformation : 1:4.",
+
+  "game:gamemechanicinfo-electricalprogressive-title": "Électricité : Mod électrique progressif",
+  "game:gamemechanicinfo-electricalprogressive-text": "<strong>Électricité : Mod électrique progressif</strong><br>Ce mod introduit l'énergie électrique, les appareils électriques, les dispositifs, les armes et les armures dans le jeu. Ces ajouts visent à simplifier (ou compliquer) la survie, à réduire les tâches répétitives et à diversifier le gameplay.<br><br><strong>Notions de base</strong><br>La loi de conservation de l'énergie stipule que l'énergie ne peut être ni créée ni détruite ; elle se transforme ou se transfère simplement entre différentes formes. Ce principe s'applique également en jeu.<br><br>Les éoliennes constituent la principale source d'énergie mécanique. Les générateurs convertissent l'énergie mécanique en énergie électrique en transférant le couple d'une éolienne à un générateur via des arbres et/ou des engrenages. Une fois connecté, le générateur commence à produire de l'électricité.<br><br>L'énergie électrique est transmise aux consommateurs par câbles. Placez les câbles le long des blocs dans la direction souhaitée. Chaque face de bloc peut accueillir jusqu'à 4 câbles, permettant ainsi des dérivations et des configurations de circuits complexes. Les câbles doivent être connectés à la plaque métallique d'un appareil électrique pour l'activer. Les appareils électriques et les blocs métalliques peuvent également conduire le courant.<br><br>La force du vent étant variable, les générateurs ne produisent pas toujours suffisamment d'énergie. Pour pallier ce problème, connectez votre circuit à des batteries. Elles stockent l'énergie excédentaire et la fournissent aux appareils même en l'absence de vent. Pour économiser l'énergie, débranchez les appareils inutilisés à l'aide d'un interrupteur manuel. Installez des interrupteurs aux endroits du circuit où une commutation rapide de l'alimentation est nécessaire.<br><br>Pour les appareils nécessitant de l'énergie mécanique, utilisez des moteurs. Les moteurs convertissent l'énergie électrique en énergie mécanique. Ils sont reliés aux appareils via des arbres. Lorsqu'ils sont en marche, les moteurs cherchent à fournir un couple maximal ; il faut donc veiller à ce que le circuit dispose d'une énergie suffisante.",
+
+  "game:gamemechanicinfo-electricalprogressive-rotors-title": "Électricité : Moteurs et générateurs",
+  "game:gamemechanicinfo-electricalprogressive-rotors-text": "<strong>Électricité : Moteurs et générateurs</strong><br>Les moteurs et générateurs du mod permettent une conversion bidirectionnelle entre énergie électrique et mécanique. Connectez-les via des câbles et des axes.<br><br><strong>Mécanique du jeu</strong><br>Les moteurs et les générateurs simulent des machines à courant continu réelles. Pour les utiliser efficacement, il est important de comprendre leurs principes de fonctionnement.<br>Tous les mécanismes rotatifs (par exemple, les arbres, les engrenages) ont deux paramètres : <i>couple</i> (force de rotation) et <i>résistance</i> (frottements/pertes). Les arbres et les engrenages ont un couple nul. Le jeu additionne toutes les valeurs de couple et de résistance pour calculer la vitesse de l'arbre.(<i>vitesse</i>) et l'accélération/décélération. Si le couple dépasse la résistance, la vitesse augmente ; sinon, elle diminue. La résistance augmente généralement avec la vitesse.<br><br><strong>Générateurs</strong><br>Paramètres du générateur :<br><i>I_max</i> – production d'énergie maximale;<br><i>speed_max</i> – vitesse de rotation nominale maximale;<br><i>resistance_factor</i> – multiplicateur de résistance;<br><i>resistance_load</i> – résistance de base (obtenue à <i>I_max</i>).<br><br>La puissance de sortie dépend de la vitesse de l'arbre : <br><i>power = I_max *(1 – (|speed| / speed_max – 1)^4 )</i>.<br>La production augmente rapidement à partir de zéro et atteint un plateau à <i>I_max</i> quand <i>speed_max</i> est dépassé.<br>La résistance augmente linéairement en dessous <i>speed_max</i> et quadratiquement au-dessus. La résistance varie également en fonction de la charge électrique du générateur. Une charge minimale entraîne une résistance minimale.<br><br><strong>Moteurs</strong><br>Paramètres du moteur :<br><i>I_min</i> – énergie minimale requise pour fonctionner;<br><i>I_max</i> – consommation d'énergie maximale;<br><i>torque_max</i> – couple maximal;<br><i>kpd_max</i> – efficacité maximale;<br><i>speed_max</i> – vitesse nominale maximale;<br><i>resistance_factor</i> – multiplicateur de résistance.<br><br>Le couple moteur est proportionnel à l'énergie disponible. Le rendement atteint un maximum de 70 % de<i>torque_max </i>, suivant une courbe parabolique (ouverture vers le bas) jusqu'à <i>kpd_max</i>, puis tombe à 90 % de <i>kpd_max</i> à <i>torque_max</i>.<br>La résistance du moteur utilise le même calcul que les générateurs, mais <i>resistance_load</i> est nul.",
+
+  "game:gamemechanicinfo-electricalprogressive-princip-title": "Électricité : Comportement du courant et tension",
+  "game:gamemechanicinfo-electricalprogressive-princip-text": "<strong>Électricité : Comportement du courant et tension</strong><br>Le courant électrique circule désormais dans les conducteurs conformément à la physique réelle. Il est temps de dépoussiérer vos manuels de physique !<br><br><strong>Nouvelle mécanique du comportement</strong><br>Le courant circule sous forme de paquets d'énergie (sauf en mode instantané). Les paquets suivent le chemin le plus court des sources aux consommateurs. Les conducteurs (câbles/appareils) ont désormais des propriétés électriques :<br>- Résistivité (dépendant du matériau) ;<br>- Section transversale ;<br>- Courant maximal (un dépassement provoque un grillage) ;<br>- Tension maximale.<br>Le courant est calculé selon la loi d'Ohm pour chaque paquet d'énergie d'un bloc/face. Pour éviter le grillage, renforcez les câbles en ajoutant des câbles du même type sur les câbles existants. Cependant, la perte d'énergie (loi de Joule-Lenz) augmente avec le courant. Pour les transmissions longue distance, utilisez des tensions plus élevées ou des batteries comme tampons.<br><br><strong>Tension</strong><br>Les appareils nécessitent désormais des niveaux de tension spécifiques. Un dépassement de tension endommage les appareils/câbles. Les transformateurs ajustent la tension de manière bidirectionnelle ; soyez prudent avec les connexions à tensions mixtes ! Une tension plus élevée permet un meilleur débit d'énergie.",
+
+  "block-handbooktitle-emotor-tier1": "Usage",
+  "block-handbooktext-emotor-tier1": "Convertit l'énergie électrique en énergie mécanique. Faible puissance et vitesse.<br><br>Paramètres : <br><i>I_min</i> : 10 ; <br><i>I_max</i> : 100 ; <br><i>torque_max</i> : 0,5 ; <br><i>kpd_max</i> : 0,75 ; <br><i>speed_max</i> : 0,5 ; <br><i>resistance_factor</i> : 0,1. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "block-handbooktitle-emotor-tier2": "Usage",
+  "block-handbooktext-emotor-tier2": "Moteur amélioré avec une puissance et une vitesse supérieures à celles du <a href=\"handbooksearch:\/\/engine\">moteur de base</a>.<br><br>Paramètres : <br><i>I_min</i> : 10 ; <br><i>I_max</i> : 400 ; <br><i>torque_max</i> : 1,0 ; <br><i>kpd_max</i> : 0,85 ; <br><i>speed_max</i> : 1,0 ; <br><i>resistance_factor</i> : 0,1. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "block-handbooktitle-emotor-tier3": "Usage",
+  "block-handbooktext-emotor-tier3": "Moteur hautes performances avec une puissance supérieure. Meilleur que les <a href=\"handbooksearch:\/\/upgraded engine\">moteurs améliorés</a>.<br><br>Paramètres : <br><i>I_min</i> : 10 ; <br><i>I_max</i> : 800 ; <br><i>torque_max</i> : 2,0 ; <br><i>kpd_max</i> : 0,95 ; <br><i>speed_max</i> : 1,0 ; <br><i>resistance_factor</i> : 0,1. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "block-handbooktitle-egenerator-tier1": "Usage",
+  "block-handbooktext-egenerator-tier1": "Convertit l'énergie mécanique en énergie électrique. Faible puissance.<br><br>Paramètres : <br><i>I_max</i> : 100 ; <br><i>speed_max</i> : 0,5 ; <br><i>resistance_factor</i> : 0,1 ; ​​<br><i>resistance_load</i> : 0,25. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "block-handbooktitle-egenerator-tier2": "Usage",
+  "block-handbooktext-egenerator-tier2": "Générateur amélioré avec une puissance supérieure à celle du <a href=\"handbooksearch:\/\/generator\">générateur de base</a>.<br><br>Paramètres : <br><i>I_max</i> : 200 ; <br><i>speed_max</i> : 1,0 ; <br><i>resistance_factor</i> : 0,1 ; ​​<br><i>resistance_load</i> : 0,32. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "block-handbooktitle-egenerator-tier3": "Usage",
+  "block-handbooktext-egenerator-tier3": "Générateur hautes performances avec une puissance maximale. Meilleur que les <a href=\"handbooksearch:\/\/upgraded generator\">générateurs améliorés</a>.<br><br>Paramètres : <br><i>I_max</i> : 400 ; <br><i>speed_max</i> : 1,0 ; <br><i>resistance_factor</i> : 0,1 ; ​​<br><i>resistance_load</i> : 0,81. <br>Détails dans le <a href=\"handbook:\/\/gamemechanicinfo-electricalprogressive-rotors\">guide</a>.",
+
+  "item-handbooktitle-coil": "Usage",
+  "item-handbooktext-coil": "Qu’est-ce que l’électricité sans bobines de cuivre ?",
+
+  "item-handbooktitle-engineshaft": "Usage",
+  "item-handbooktext-engineshaft": "Utilisé dans les moteurs/générateurs et autres dispositifs rotatifs.",
+
+  "game:Electricity": "Réseau électrique",
+  "game:Storage": "Stockage",
+  "game:Temperature": "Température",
+  "game:Contents": "Contenu",
+  "game:Consumers": "Consommateurs",
+  "game:Generators": "Générateurs",
+  "game:Batteries": "Batteries",
+  "game:Transformers": "Transformateurs",
+  "game:Blocks": "Blocs",
+  "game:Generation": "Génération",
+  "game:W": "W",
+  "game:Consumption": "Consommation",
+  "game:Production": "Production",
+  "game:Shortage": "Pénurie",
+
+  "game:Press": "Prise",
+  "game:for details": "pour plus de détails",
+
+  "game:Block": "Bloc",
+  "game:Max. current": "Courant max.",
+  "game:Current": "Courant",
+  "game:Resistivity": "Résistivité",
+  "game:Resistance": "Résistance",
+  "game:Lines": "Lignes",
+  "game:Section size": "Coupe transversale",
+  "game:Max voltage": "Tension max.",
+  "game:V": "V",
+  "game:units": "unités",
+  "game:pcs.": "pcs.",
+  "game:A": "A",
+  "game:Om/line": "Ω/ligne",
+  "game:Om": "Ω",
+  "game:Burned": "!!!BRÛLÉ!!!",
+  "game:Power": "Puissance",
+  "game:J": "J",
+  "game:max": "max",
+  "game:Voltage": "Tension",
+  "game:High Voltage": "Haute Tension",
+  "game:Low Voltage": "Basse Tension"
+}
