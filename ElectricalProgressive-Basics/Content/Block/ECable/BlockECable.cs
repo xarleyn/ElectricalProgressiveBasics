@@ -539,7 +539,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                                 connection = selectedFacing & FacingHelper.FromFace(face);                   //берем направления только в этой грани
 
                                 if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                                    entity.AllEparams[face.Index] = default;
+                                    entity.AllEparams[face.Index] = new EParams();
 
                                 stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
 
@@ -600,7 +600,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                     connection = entity.Connection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
 
                     if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                        entity.AllEparams[face.Index] = default;
+                        entity.AllEparams[face.Index] = new EParams();
 
                     var stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
 
@@ -700,7 +700,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                             var connection = selectedConnection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
 
                             if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                                entity.AllEparams[face.Index] = default;
+                                entity.AllEparams[face.Index] = new EParams();
 
                             stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
 

@@ -1,4 +1,4 @@
-using ElectricalProgressive.Content.Block;
+п»їusing ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Utils;
 using System;
 using System.Linq;
@@ -11,17 +11,25 @@ public class BlockEntityEAccumulator : BlockEntity
     private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
 
-    //передает значения из Block в BEBehavior
+    //РїРµСЂРµРґР°РµС‚ Р·РЅР°С‡РµРЅРёСЏ РёР· Block РІ BEBehaviorElectricalProgressive
     public (EParams, int) Eparams
     {
-        get => this.ElectricalProgressive!.Eparams;
+        get => this.ElectricalProgressive?.Eparams ?? (new EParams(), 0);
         set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //передает значения из Block в BEBehavior
+    //РїРµСЂРµРґР°РµС‚ Р·РЅР°С‡РµРЅРёСЏ РёР· Block РІ BEBehaviorElectricalProgressive
     public EParams[] AllEparams
     {
-        get => this.ElectricalProgressive?.AllEparams ?? null;
+        get => this.ElectricalProgressive?.AllEparams ?? new EParams[]
+                    {
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams()
+                    };
         set
         {
             if (this.ElectricalProgressive != null)
@@ -36,7 +44,7 @@ public class BlockEntityEAccumulator : BlockEntity
     {
         base.OnBlockPlaced(byItemStack);
 
-        //задаем параметры блока/проводника
+        //Р·Р°РґР°РµРј РїР°СЂР°РјРµС‚СЂС‹ Р±Р»РѕРєР°/РїСЂРѕРІРѕРґРЅРёРєР°
         var voltage = MyMiniLib.GetAttributeInt(byItemStack!.Block, "voltage", 32);
         var maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack!.Block, "maxCurrent", 5.0F);
         var isolated = MyMiniLib.GetAttributeBool(byItemStack!.Block, "isolated", false);

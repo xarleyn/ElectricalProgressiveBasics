@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -26,17 +26,25 @@ public class BlockEntityEMotor : BlockEntity
     }
 
 
-    //ïåðåäàåò çíà÷åíèÿ èç Block â BEBehaviorElectricalProgressive
+    //Ð¿ÐµÑ€ÐµÐ´Ð°ÐµÑ‚ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ Ð¸Ð· Block Ð² BEBehaviorElectricalProgressive
     public (EParams, int) Eparams
     {
-        get => this.ElectricalProgressive!.Eparams;
+        get => this.ElectricalProgressive?.Eparams ?? (new EParams(), 0);
         set => this.ElectricalProgressive!.Eparams = value;
     }
 
-    //ïåðåäàåò çíà÷åíèÿ èç Block â BEBehaviorElectricalProgressive
+    //Ð¿ÐµÑ€ÐµÐ´Ð°ÐµÑ‚ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ Ð¸Ð· Block Ð² BEBehaviorElectricalProgressive
     public EParams[] AllEparams
     {
-        get => this.ElectricalProgressive?.AllEparams ?? null;
+        get => this.ElectricalProgressive?.AllEparams ?? new EParams[]
+                    {
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams(),
+                        new EParams()
+                    };
         set
         {
             if (this.ElectricalProgressive != null)

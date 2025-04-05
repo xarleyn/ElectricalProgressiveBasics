@@ -1,10 +1,10 @@
-{
+﻿{
   "ingredientPattern": "HS,XM,LC",
   "width": 2,
   "height": 3,
   "ingredients": {
     "L": {
-      "type": "item",
+      "type": "block",
       "code": "game:linen-*-down",
       "quantity": 2
     },
