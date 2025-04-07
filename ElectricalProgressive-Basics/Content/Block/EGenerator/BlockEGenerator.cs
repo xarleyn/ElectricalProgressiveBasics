@@ -170,7 +170,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
                 var block = clientApi.World.BlockAccessor.GetBlockEntity(pos).Block;
 
                 clientApi.Tesselator.TesselateBlock(block, out meshData);
-                //clientApi.TesselatorManager.ThreadDispose(); //обязательно?
+                clientApi.TesselatorManager.ThreadDispose(); //обязательно?
 
                 if ((facing & Facing.NorthEast) != 0)
                 {

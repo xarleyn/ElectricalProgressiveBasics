@@ -663,7 +663,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                     if (stackSize > 0)
                     {
-                        var assetLocation = new AssetLocation("electricalprogressive:switch-enabled");
+                        var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
                         var block = world.BlockAccessor.GetBlock(assetLocation);
                         var itemStack = new ItemStack(block, stackSize);
                         world.SpawnItemEntity(itemStack, pos.ToVec3d());

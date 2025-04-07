@@ -45,13 +45,16 @@ public class BlockEntityETransformator : BlockEntity
     {
         base.OnBlockPlaced(byItemStack);
 
+        if (this.ElectricalProgressive == null || byItemStack == null)
+            return;
+
         //задаем параметры блока/проводника
         var voltage = MyMiniLib.GetAttributeInt(byItemStack!.Block, "voltage", 32);
         var lowVoltage = MyMiniLib.GetAttributeInt(byItemStack!.Block, "lowVoltage", 32);
         var maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack!.Block, "maxCurrent", 5.0F);
         var isolated = MyMiniLib.GetAttributeBool(byItemStack!.Block, "isolated", false);
 
-        this.ElectricalProgressive!.Connection = Facing.DownAll;
+        this.ElectricalProgressive.Connection = Facing.DownAll;
         this.ElectricalProgressive.Eparams = (
             new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated),
             FacingHelper.Faces(Facing.DownAll).First().Index);

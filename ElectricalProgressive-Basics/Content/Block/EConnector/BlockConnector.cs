@@ -47,15 +47,8 @@ public class BlockConnector : Vintagestory.API.Common.Block {
                     return;
                 }
 
-                var selectedConnection = entity.Connection & selectedFacing;
 
-                if (selectedConnection != Facing.None) {
-                    var stackSize = FacingHelper.Count(selectedConnection);
 
-                    if (stackSize > 0) {
-                        entity.Connection &= ~selectedConnection;
-                    }
-                }
             }
         }
     }

@@ -44,6 +44,9 @@ public class BlockEntityEAccumulator : BlockEntity
     {
         base.OnBlockPlaced(byItemStack);
 
+        if (this.ElectricalProgressive == null || byItemStack == null)
+            return;
+
         //задаем параметры блока/проводника
         var voltage = MyMiniLib.GetAttributeInt(byItemStack!.Block, "voltage", 32);
         var maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack!.Block, "maxCurrent", 5.0F);

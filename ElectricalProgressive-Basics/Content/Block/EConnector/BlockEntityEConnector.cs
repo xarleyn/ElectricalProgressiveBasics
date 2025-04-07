@@ -14,6 +14,10 @@ public class BlockEntityEConnector : BlockEntityECable {
 
         var electricity = this.ElectricalProgressive;
 
+        if (electricity == null || byItemStack == null)
+            return;
+
+
         if (electricity != null) {
             electricity.Connection = Facing.AllAll;
 
