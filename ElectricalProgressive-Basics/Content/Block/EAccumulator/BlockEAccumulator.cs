@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Text;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
@@ -32,6 +32,7 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
     public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack,
         BlockSelection blockSel, ref string failureCode)
     {
+        //РЅРµРІР°Р»СЏР¶РєР° - С‚РѕР»СЊРєРѕ РІРµСЂС‚РёРєР°Р»СЊРЅРѕ
         return world.BlockAccessor
                    .GetBlock(blockSel.Position.AddCopy(BlockFacing.DOWN))
                    .SideSolid[BlockFacing.indexUP]
@@ -54,7 +55,7 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
 
 
     /// <summary>
-    /// Получение информации о предмете в инвентаре
+    /// РџРѕР»СѓС‡РµРЅРёРµ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїСЂРµРґРјРµС‚Рµ РІ РёРЅРІРµРЅС‚Р°СЂРµ
     /// </summary>
     /// <param name="inSlot"></param>
     /// <param name="dsc"></param>
@@ -87,7 +88,7 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
     }
 
     /// <summary>
-    /// Проверка на возможность установки блока
+    /// РџСЂРѕРІРµСЂРєР° РЅР° РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СѓСЃС‚Р°РЅРѕРІРєРё Р±Р»РѕРєР°
     /// </summary>
     /// <param name="world"></param>
     /// <param name="byPlayer"></param>
