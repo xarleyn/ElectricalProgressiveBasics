@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "ingredientPattern": "M",
     "width": 1,
@@ -22,7 +22,7 @@
   },
 
   {
-    "ingredientPattern": "HSH,XMC,_G_",
+    "ingredientPattern": "HS_,XMC,_G_",
     "width": 3,
     "height": 3,
     "ingredients": {
@@ -66,7 +66,7 @@
     }
   },
   {
-    "ingredientPattern": "HSH,XMC,_G_",
+    "ingredientPattern": "HS_,XMC,_G_",
     "requiresTrait": "tinkerer",
     "width": 3,
     "height": 3,
@@ -112,8 +112,7 @@
   },
 
   {
-    "ingredientPattern": "HSH,XGC",
-    "requiresTrait": "tinkerer",
+    "ingredientPattern": "HS_,XGC",
     "width": 3,
     "height": 2,
     "ingredients": {
@@ -129,9 +128,9 @@
         "quantity": 1
       },
       "X": {
-        "type": "item",
-        "code": "game:ingot-electrum",
-        "quantity": 1
+        "type": "block",
+        "code": "electricalprogressivebasics:ecable-128v-electrum-single-part",
+        "quantity": 4
       },
       "G": {
         "type": "item",

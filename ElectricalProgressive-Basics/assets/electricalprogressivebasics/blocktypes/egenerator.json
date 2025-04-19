@@ -1,4 +1,4 @@
-{
+﻿{
   "code": "egenerator",
   "class": "BlockEGenerator",
   "entityClass": "BlockEntityEGenerator",
@@ -68,19 +68,19 @@
 
   "attributesByType": { //параметры генератора, менять на свой страх и риск
     "*-tier1-*": {
-      "params": [ 100.0, 0.5, 0.1, 0.25 ],
+      "params": [ 128.0, 0.6, 0.01, 0.5 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": false
     },
     "*-tier2-*": {
-      "params": [ 200.0, 1.0, 0.1, 0.32 ],
+      "params": [ 256.0, 0.4, 0.01, 1.0 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": false
     },
     "*-tier3-*": {
-      "params": [ 400.0, 1.0, 0.1, 0.81 ],
+      "params": [ 512.0, 0.2, 0.01, 1.0 ],
       "voltage": 128,
       "maxCurrent": 20.0,
       "isolated": false

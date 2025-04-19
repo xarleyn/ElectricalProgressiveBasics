@@ -13,7 +13,7 @@ namespace ElectricalProgressive.Content.Block.EMotor;
 public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
 {
     private readonly static Dictionary<(Facing, string), MeshData> MeshData = new();
-
+    private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F };          //заглушка
     public override void OnUnloaded(ICoreAPI api)
     {
         base.OnUnloaded(api);
@@ -303,5 +303,14 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
     {
         base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
         dsc.AppendLine(Lang.Get("Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
+
+        float[] Params = MyMiniLib.GetAttributeArrayFloat(inSlot.Itemstack.Block, "params", def_Params);
+
+
+
+        dsc.AppendLine(Lang.Get("Consumption") + ": " + Params[1] + " " + Lang.Get("W"));
+        dsc.AppendLine(Lang.Get("max_speed") + ": " + Params[4] + " " + Lang.Get("rps"));
+        dsc.AppendLine(Lang.Get("max_torque") + ": " + Params[2]);
+        dsc.AppendLine(Lang.Get("kpd") + ": " + Params[3]*100 + " %");
     }
 }

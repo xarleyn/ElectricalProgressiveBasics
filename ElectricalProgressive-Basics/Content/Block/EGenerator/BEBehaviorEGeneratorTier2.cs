@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -137,42 +137,52 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
 
     }
 
+
     /// <summary>
     /// Генератор отдает энергию
     /// </summary>
     public float Produce_give()
     {
-
         float speed = this.network?.Speed ?? 0.0F;
 
-        float b = 1f;                                                                       // Положение вершины кривой
-        float a = 1F;
         float power = (Math.Abs(speed) <= speed_max)                                        // Задаем форму кривых тока(мощности)
-            ? (int)((1 - a * (float)Math.Pow(Math.Abs(speed) / speed_max - b, 4F)) * I_max) // Степенная с резким падением ближе к 0
-            : (int)(I_max);                                                                 // Линейная горизонтальная
-
-        power = Math.Max(0, power);                                                         // Чтобы уж точно не ниже нуля
+            ? Math.Abs(speed) / speed_max * I_max
+            : I_max;                                                                 // Линейная горизонтальная
 
 
         this.powerGive = power;
         return power;
     }
 
+
     public bool isBurned => this.Block.Variant["type"] == "burned";
 
+
+    public override float GetResistance()
+    {
+        return 0;
+    }
+
+
+    public override float GetTorque(long tick, float speed, out float resistance)
+    {
+        resistance = Resistance(speed);         // Вычисляем текущее сопротивление двигателя 
+
+        return 0.0F;
+    }
 
     /// <summary>
     /// Механическая сеть берет отсюда сопротивление этого генератора
     /// </summary>
-    public override float GetResistance()
+    public float Resistance(float spd)
     {
+
         if (isBurned) //клиним ротор, если сгорел
         {
             return 9999.0F;
         }
 
 
-        float spd = this.Network.Speed;
         return (Math.Abs(spd) > speed_max)                                                                                      // Если скорость превышает максимальную, рассчитываем сопротивление как квадратичную
             ? resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * (float)Math.Pow((Math.Abs(spd) / speed_max), 2f))   // Степенная зависимость, если скорость ушла за пределы двигателя              
             : resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * Math.Abs(spd) / speed_max);                         // Линейное сопротивление для обычных скоростей

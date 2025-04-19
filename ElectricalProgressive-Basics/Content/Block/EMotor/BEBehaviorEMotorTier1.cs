@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using ElectricalProgressive.Interface;
@@ -186,8 +186,6 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
     }
 
 
-    public bool isBurned => this.Block.Variant["type"] == "burned";
-
     /// <summary>
     /// Считаем сопротивление самого двигателя
     /// </summary>
@@ -204,18 +202,7 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
     }
 
 
-    /// <summary>
-    /// Рассчитываем КПД
-    /// </summary>
-    public float KPD(float tor)
-    {
-        float b = 0.7f;                         // Положение вершины параболы
-        float a = (tor <= torque_max / 2.0F)    // Левая и права ветвь параболы разные
-            ? 2.04F
-            : 0.8f;
-        float buf = kpd_max * (1 - a * (float)Math.Pow(tor / torque_max - b, 2));   // Параболическая зависимость
-        return Math.Max(0.01f, buf);                                                // Минимальное значение КПД
-    }
+
 
 
     /// <summary>
@@ -236,40 +223,17 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
         I_value = Math.Min(I_amount, I_max);    // Берем, что дают
 
 
-        //torque = Math.Min(Network.NetworkResistance, torque_max);           // Рассчитываем момент для компенсации сопротивления
-        //float torque2 = torque_max * (I_value - I_min) / (I_max - I_min);   // Рассчитываем момент линейно от тока
-        //torque = (torque + torque2) / 2;                                    // Выдаем момент среднее между вычисленных
-
-        torque = torque_max * (I_value - I_min) / (I_max - I_min);        // Берем максимум момента из всей энергии, что нам дают
-
-        I_value = torque * constanta / KPD(torque) + I_min;                 // Ток потребления с учетом КПД
+        if (I_value < I_min)                                        // Если ток меньше минимального, двигатель не работает
+            torque = 0.0F;
+        else
+            torque = I_value / I_max * torque_max;      // линейная
 
 
-        float torque_down = 0;                                              
-        int k = 0;
-        while (I_value > I_max || I_value > I_amount)                                           // Проверка, чтобы ток не превышал максимальное значение I_max и I_amount
-        {
-            k++;
-            
-            // Пропорционально снижаем крутящий момент
-            torque_down = torque * (1 - (0.02F * k));                       // Уменьшаем крутящий момент на 2%
-
-            if (torque_down < 0)
-            {
-                torque_down = 0;
-                break;
-            }
-            
-            I_value = torque_down * constanta / KPD(torque_down) + I_min;  // Ток потребления с учетом КПД
-
-        }
-
-        if (k > 0)
-            torque = torque_down;                                           // Отдаем новое значение момента
+        torque *= kpd_max; // учитываем КПД
 
 
         this.powerRequest = I_max;                                        // Запрашиваем энергии столько, сколько нужно  для работы (работает как положено)
-        
+
 
         return this.propagationDir == this.OutFacingForNetworkDiscovery     // Возвращаем все значения
             ? 1f * torque
@@ -278,8 +242,7 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
     }
 
 
-
-
+    public bool isBurned => this.Block.Variant["type"] == "burned";
 
     /// <summary>
     /// Выдается игре шейп для отрисовки ротора
