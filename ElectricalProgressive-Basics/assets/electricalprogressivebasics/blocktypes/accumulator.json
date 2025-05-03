@@ -1,4 +1,4 @@
-{
+﻿{
   "code": "accumulator",
   "class": "BlockEAccumulator",
   "entityClass": "BlockEntityEAccumulator",
@@ -62,7 +62,6 @@
   },
 
   "attributes": {
-    "rechargeable": true,
     "handbook": {
       "groupBy": [ "accumulator-*" ],
       "extraSections": [
@@ -75,19 +74,24 @@
   },
 
   "attributesByType": {
-    "*-tier1-*": {
+    "*-tier1-normal": {
       "maxcapacity": 64000,
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": false,
-      "power": 128.0
+      "power": 128.0,
+      "rechargeable": true
     },
-    "*-tier2-*": {
+    "*-tier2-normal": {
       "maxcapacity": 256000,
       "voltage": 128,
       "maxCurrent": 20.0,
       "isolated": false,
-      "power": 512.0
+      "power": 512.0,
+      "rechargeable": false
+    },
+    "*": {
+      "rechargeable": false
     }
   },
 

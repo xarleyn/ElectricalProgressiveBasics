@@ -21,12 +21,12 @@ public class BlockEntityEConnector : BlockEntityECable {
         if (electricity != null) {
             electricity.Connection = Facing.AllAll;
 
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true),0);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true), 1);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true), 2);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true), 3);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true), 4);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, true), 5);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false),0);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 1);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 2);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 3);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 4);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 5);
 
         }
     }

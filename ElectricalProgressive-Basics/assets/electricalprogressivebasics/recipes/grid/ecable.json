@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "ingredientPattern": "PS",
     "width": 2,
@@ -33,6 +33,44 @@
       "quantity": 16
     }
   },
+
+
+  {
+    "ingredientPattern": "HI",
+    "width": 1,
+    "height": 2,
+    "ingredients": {
+      "H": {
+        "type": "item",
+        "code": "game:chisel-*",
+        "isTool": true,
+        "toolDurabilityCost": 2
+      },
+      "I": {
+        "type": "block",
+        "code": "electricalprogressivebasics:ecable-32v-*-single-part",
+        "quantity": 8,
+        "name": "metal",
+        "allowedVariants": [
+          "copper",
+          "silver",
+          "lead",
+          "gold",
+          "steel",
+          "iron",
+          "tinbronze",
+          "brass",
+          "electrum"
+        ]
+      }
+    },
+    "output": {
+      "type": "item",
+      "code": "game:metalbit-{metal}",
+      "quantity": 20
+    }
+  },
+
 
   {
     "ingredientPattern": "PS,IW",
@@ -79,6 +117,44 @@
     }
   },
 
+
+  {
+    "ingredientPattern": "HI",
+    "width": 1,
+    "height": 2,
+    "ingredients": {
+      "H": {
+        "type": "item",
+        "code": "game:chisel-*",
+        "isTool": true,
+        "toolDurabilityCost": 2
+      },
+      "I": {
+        "type": "block",
+        "code": "electricalprogressivebasics:ecable-32v-*-single-isolated",
+        "quantity": 8,
+        "name": "metal",
+        "allowedVariants": [
+          "copper",
+          "silver",
+          "lead",
+          "gold",
+          "steel",
+          "iron",
+          "tinbronze",
+          "brass",
+          "electrum"
+        ]
+      }
+    },
+    "output": {
+      "type": "item",
+      "code": "game:metalbit-{metal}",
+      "quantity": 20
+    }
+  },
+
+
   {
     "ingredientPattern": "PS",
     "width": 1,
@@ -113,6 +189,44 @@
       "quantity": 8
     }
   },
+
+
+  {
+    "ingredientPattern": "HI",
+    "width": 1,
+    "height": 2,
+    "ingredients": {
+      "H": {
+        "type": "item",
+        "code": "game:chisel-*",
+        "isTool": true,
+        "toolDurabilityCost": 2
+      },
+      "I": {
+        "type": "block",
+        "code": "electricalprogressivebasics:ecable-128v-*-single-part",
+        "quantity": 4,
+        "name": "metal",
+        "allowedVariants": [
+          "copper",
+          "silver",
+          "lead",
+          "gold",
+          "steel",
+          "iron",
+          "tinbronze",
+          "brass",
+          "electrum"
+        ]
+      }
+    },
+    "output": {
+      "type": "item",
+      "code": "game:metalbit-{metal}",
+      "quantity": 20
+    }
+  },
+
 
   {
     "ingredientPattern": "PI,SW",
@@ -156,6 +270,43 @@
       "type": "block",
       "code": "electricalprogressivebasics:ecable-128v-{metal}-single-isolated",
       "quantity": 8
+    }
+  },
+
+
+  {
+    "ingredientPattern": "HI",
+    "width": 1,
+    "height": 2,
+    "ingredients": {
+      "H": {
+        "type": "item",
+        "code": "game:chisel-*",
+        "isTool": true,
+        "toolDurabilityCost": 2
+      },
+      "I": {
+        "type": "block",
+        "code": "electricalprogressivebasics:ecable-128v-*-single-isolated",
+        "quantity": 4,
+        "name": "metal",
+        "allowedVariants": [
+          "copper",
+          "silver",
+          "lead",
+          "gold",
+          "steel",
+          "iron",
+          "tinbronze",
+          "brass",
+          "electrum"
+        ]
+      }
+    },
+    "output": {
+      "type": "item",
+      "code": "game:metalbit-{metal}",
+      "quantity": 20
     }
   }
 
