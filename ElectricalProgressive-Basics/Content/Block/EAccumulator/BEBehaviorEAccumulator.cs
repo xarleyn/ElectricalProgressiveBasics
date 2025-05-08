@@ -90,6 +90,14 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator entity && entity.AllEparams != null)
         {
             bool hasBurnout = entity.AllEparams.Any(e => e.burnout);
+
+            if (hasBurnout)
+            {
+                if (entity.Block.Variant["tier"] == "tier1")
+                    ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+                else if (entity.Block.Variant["tier"] == "tier2")
+                    ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 1.9, 0.5));
+            }
             if (hasBurnout && entity.Block.Variant["status"] != "burned")
             {
                 this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("status", "burned")).BlockId, Pos);

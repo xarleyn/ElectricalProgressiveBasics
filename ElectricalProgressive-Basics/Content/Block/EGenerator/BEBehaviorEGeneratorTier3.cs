@@ -282,6 +282,11 @@ public class BEBehaviorEGeneratorTier3 : BEBehaviorMPBase, IElectricProducer
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEGenerator entity && entity.AllEparams != null)
         {
             bool hasBurnout = entity.AllEparams.Any(e => e.burnout);
+            if (hasBurnout)
+            {
+                ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+            }
+
             if (hasBurnout && entity.Block.Variant["type"] != "burned")
             {
                 string type = "type";

@@ -68,11 +68,11 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
             return false;
         }
 
+        
         if (
             FacingHelper.Faces(facing).First() is { } blockFacing &&
             !world.BlockAccessor
-                .GetBlock(blockSel.Position.AddCopy(blockFacing))
-                .SideSolid[blockFacing.Opposite.Index]
+                .GetBlock(blockSel.Position.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index]
         )
         {
             return false;
@@ -92,7 +92,17 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
         }
 
         var selection = new Selection(blockSel);
-        var facing = FacingHelper.From(selection.Face, selection.Direction);
+
+        Facing facing = Facing.None;
+
+        try
+        {
+            facing = FacingHelper.From(selection.Face, selection.Direction);
+        }
+        catch
+        {
+            return false;
+        }
 
         if (
             base.DoPlaceBlock(world, byPlayer, blockSel, byItemStack) &&
@@ -136,14 +146,17 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
     {
         base.OnNeighbourBlockChange(world, pos, neibpos);
 
-        if (
-            world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEGenerator entity &&
-            FacingHelper.Faces(entity.Facing).First() is { } blockFacing &&
-            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index]
-        )
-
+        if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEGenerator entity)
         {
-            world.BlockAccessor.BreakBlock(pos, null);
+            var faces = FacingHelper.Faces(entity.Facing);
+            if (
+            faces != null &&
+            faces.Any() &&
+            faces.First() is { } blockFacing &&
+            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index])
+            {
+                world.BlockAccessor.BreakBlock(pos, null);
+            }
         }
     }
 

@@ -32,9 +32,13 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
 
     public bool HasMechPowerConnectorAt(IWorldAccessor world, BlockPos pos, BlockFacing face)
     {
-        if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity && entity.Facing != Facing.None)
+        if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity && entity.Facing != null && entity.Facing != Facing.None)
         {
-            return FacingHelper.Directions(entity.Facing).First() == face;
+            var directions = FacingHelper.Directions(entity.Facing);
+            if (directions.Any())
+            {
+                return directions.First() == face;
+            }
         }
 
         return false;
@@ -57,7 +61,17 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
         BlockSelection blockSel, ref string failureCode)
     {
         var selection = new Selection(blockSel);
-        var facing = FacingHelper.From(selection.Face, selection.Direction);
+
+        Facing facing = Facing.None;
+
+        try
+        {
+            facing = FacingHelper.From(selection.Face, selection.Direction);
+        }
+        catch
+        {
+            return false;
+        }
 
         if (
             FacingHelper.Faces(facing).First() is { } blockFacing &&
@@ -84,7 +98,16 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
         }
 
         var selection = new Selection(blockSel);
-        var facing = FacingHelper.From(selection.Face, selection.Direction);
+        Facing facing = Facing.None;
+
+        try
+        {
+            facing = FacingHelper.From(selection.Face, selection.Direction);
+        }
+        catch
+        {
+            return false;
+        }
 
         if (
             base.DoPlaceBlock(world, byPlayer, blockSel, byItemStack) &&
@@ -128,13 +151,17 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
     {
         base.OnNeighbourBlockChange(world, pos, neibpos);
 
-        if (
-            world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity &&
-            FacingHelper.Faces(entity.Facing).First() is { } blockFacing &&
-            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index]
-        )
+        if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity)
         {
-            world.BlockAccessor.BreakBlock(pos, null);
+            var faces = FacingHelper.Faces(entity.Facing);
+            if (
+            faces != null &&
+            faces.Any() &&
+            faces.First() is { } blockFacing &&
+            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index])
+            {
+                world.BlockAccessor.BreakBlock(pos, null);
+            }
         }
     }
 
