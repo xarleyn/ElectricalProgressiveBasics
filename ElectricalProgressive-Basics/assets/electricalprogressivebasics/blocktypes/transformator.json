@@ -1,4 +1,4 @@
-{
+﻿{
   "code": "transformator",
   "class": "BlockETransformator",
   "entityClass": "BlockEntityETransformator",
@@ -24,7 +24,8 @@
     "voltage": 128,
     "lowVoltage": 32,
     "maxCurrent": 20.0,
-    "isolated": false,
+    "isolated": true,
+    "isolatedEnvironment": false,
     "handbook": {
       "groupBy": [ "transformator-*" ],
       "extraSections": [

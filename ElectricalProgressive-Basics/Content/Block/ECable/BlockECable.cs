@@ -36,11 +36,11 @@ namespace ElectricalProgressive.Content.Block.ECable
         public float res;                       //удельное сопротивление из ассета
         public float maxCurrent;                //максимальный ток из ассета
         public float crosssectional;            //площадь сечения из ассета
-        public string material="";                 //материал из ассета
+        public string material="";              //материал из ассета
+        
 
         private ICoreAPI api;
 
-        DamageEntityByElectricity damageEntityByElectricity;
 
 
         public static readonly Dictionary<int, string> voltages = new Dictionary<int, string>
@@ -80,18 +80,11 @@ namespace ElectricalProgressive.Content.Block.ECable
 
 
 
-
-
-
-
-
         public override void OnLoaded(ICoreAPI api)
         {
             base.OnLoaded(api);
 
             this.api = api;
-
-            damageEntityByElectricity = new DamageEntityByElectricity(api);
 
             // предзагрузка ассетов выключателя
             {
@@ -139,9 +132,10 @@ namespace ElectricalProgressive.Content.Block.ECable
             if (world.Side == EnumAppSide.Client)
                 return;
 
-            // энтити не живой? выходим
-            if (!entity.Alive)
+            // энтити не живой и не создание? выходим
+            if (!entity.Alive || !entity.IsCreature)
                 return;
+
 
             // получаем блокэнтити этого блока
             var blockentity = (BlockEntityECable)world.BlockAccessor.GetBlockEntity(pos);
@@ -151,7 +145,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                 return;
 
             // передаем работу в наш обработчик урона
-            damageEntityByElectricity.Damage(world, entity, pos, facing, blockentity.AllEparams, this);
+            ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
 
         }
 
@@ -329,19 +323,21 @@ namespace ElectricalProgressive.Content.Block.ECable
                         ? true
                         : false;
 
+                    var isolatedEnvironment = iso; //гидроизоляция
+
                     //подгружаем некоторые параметры из ассета
                     string material = MyMiniLib.GetAttributeString(byItemStack.Block, "material", "");  //определяем материал
                     res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
                     maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
                     crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
-
+                    
 
 
                     //линий 0? Значит грань была пустая    
                     if (lines == 0)
                     {
                         entity.Eparams = (
-                            new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso),
+                            new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
                             FacingHelper.Faces(facing).First().Index);
 
                         entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -370,7 +366,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                             }
 
                             entity.Eparams = (
-                                new EParams(indexV, maxCurrent, material, res, lines, crosssectional, false, iso),
+                                new EParams(indexV, maxCurrent, material, res, lines, crosssectional, false, iso, isolatedEnvironment),
                                 FacingHelper.Faces(facing).First().Index);
 
                             entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -492,16 +488,16 @@ namespace ElectricalProgressive.Content.Block.ECable
                     bool iso = byItemStack.Block.Code.ToString().Contains("isolated")     //определяем изоляцию
                         ? true
                         : false;
+                    var isolatedEnvironment = iso; //гидроизоляция
 
                     //подгружаем некоторые параметры из ассета
                     res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
                     maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
                     crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
 
-
                     entity.Connection = facing;       //сообщаем направление
                     entity.Eparams = (
-                        new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso),
+                        new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
                         FacingHelper.Faces(facing).First().Index);
 
                     entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -2219,6 +2215,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             dsc.AppendLine(Lang.Get("Voltage") + ": " + text.Substring(0, text.Length - 1) + " " + Lang.Get("V"));
             dsc.AppendLine(Lang.Get("Max. current") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "maxCurrent", 0) + " " + Lang.Get("A"));
             dsc.AppendLine(Lang.Get("Resistivity") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "res", 0) + " " + Lang.Get("units"));
+            dsc.AppendLine(Lang.Get("WResistance") + ": " + (inSlot.Itemstack.Block.Code.Path.Contains("isolated") ? Lang.Get("Yes") : Lang.Get("No")));
         }
 
 

@@ -11,10 +11,8 @@ namespace ElectricalProgressive.Content.Block.EConnector;
 public class BlockConnector : Vintagestory.API.Common.Block
 {
 
-
     private ICoreAPI api;
 
-    DamageEntityByElectricity damageEntityByElectricity;
 
     public override void OnLoaded(ICoreAPI api)
     {
@@ -22,7 +20,6 @@ public class BlockConnector : Vintagestory.API.Common.Block
 
         this.api = api;
 
-        damageEntityByElectricity = new DamageEntityByElectricity(api);
     }
 
 
@@ -50,8 +47,8 @@ public class BlockConnector : Vintagestory.API.Common.Block
         if (world.Side == EnumAppSide.Client)
             return;
 
-        // энтити не живой? выходим
-        if (!entity.Alive)
+        // энтити не живой и не создание? выходим
+        if (!entity.Alive || !entity.IsCreature)
             return;
 
         // получаем блокэнтити этого блока
@@ -62,7 +59,7 @@ public class BlockConnector : Vintagestory.API.Common.Block
             return;
 
         // передаем работу в наш обработчик урона
-        damageEntityByElectricity.Damage(world, entity, pos, facing, blockentity.AllEparams, this);
+        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
 
     }
 

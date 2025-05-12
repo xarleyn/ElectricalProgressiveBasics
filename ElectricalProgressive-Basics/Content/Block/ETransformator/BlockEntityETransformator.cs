@@ -1,4 +1,5 @@
 ﻿using ElectricalProgressive.Content.Block;
+using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using System;
 using System.Linq;
@@ -53,10 +54,11 @@ public class BlockEntityETransformator : BlockEntity
         var lowVoltage = MyMiniLib.GetAttributeInt(byItemStack!.Block, "lowVoltage", 32);
         var maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack!.Block, "maxCurrent", 5.0F);
         var isolated = MyMiniLib.GetAttributeBool(byItemStack!.Block, "isolated", false);
+        var isolatedEnvironment = MyMiniLib.GetAttributeBool(byItemStack!.Block, "isolatedEnvironment", false);
 
         this.ElectricalProgressive.Connection = Facing.DownAll;
         this.ElectricalProgressive.Eparams = (
-            new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated),
+            new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
             FacingHelper.Faces(Facing.DownAll).First().Index);
 
     }

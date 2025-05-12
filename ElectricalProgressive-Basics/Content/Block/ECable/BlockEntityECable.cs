@@ -1,4 +1,5 @@
 ﻿using System;
+using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
@@ -6,7 +7,8 @@ using Vintagestory.API.Util;
 
 namespace ElectricalProgressive.Content.Block.ECable
 {
-    public class BlockEntityECable : BlockEntity {
+    public class BlockEntityECable : BlockEntity
+    {
         private Facing switches = Facing.None;
 
         private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
@@ -51,6 +53,8 @@ namespace ElectricalProgressive.Content.Block.ECable
             }
         }
 
+
+       
 
         public Facing Switches {
             get => this.switches;

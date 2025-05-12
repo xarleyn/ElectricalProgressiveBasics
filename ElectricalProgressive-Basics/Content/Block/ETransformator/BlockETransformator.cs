@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Text;
+using ElectricalProgressive.Content.Block.EConnector;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
@@ -39,8 +41,48 @@ public class BlockETransformator : Vintagestory.API.Common.Block
         }
     }
 
+
     /// <summary>
-    /// �������� �� ����������� ��������� �����
+    /// Кто-то или что-то коснулось блока и теперь получит урон
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="entity"></param>
+    /// <param name="pos"></param>
+    /// <param name="facing"></param>
+    /// <param name="collideSpeed"></param>
+    /// <param name="isImpact"></param>
+    public override void OnEntityCollide(
+        IWorldAccessor world,
+        Entity entity,
+        BlockPos pos,
+        BlockFacing facing,
+        Vec3d collideSpeed,
+        bool isImpact
+    )
+    {
+        // если это клиент, то не надо 
+        if (world.Side == EnumAppSide.Client)
+            return;
+
+        // энтити не живой и не создание? выходим
+        if (!entity.Alive || !entity.IsCreature)
+            return;
+
+        // получаем блокэнтити этого блока
+        var blockentity = (BlockEntityETransformator)world.BlockAccessor.GetBlockEntity(pos);
+
+        // если блокэнтити не найден, выходим
+        if (blockentity == null)
+            return;
+
+        // передаем работу в наш обработчик урона
+        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
+
+    }
+
+
+    /// <summary>
+    /// Проверка на возможность установки блока
     /// </summary>
     /// <param name="world"></param>
     /// <param name="byPlayer"></param>
@@ -58,7 +100,7 @@ public class BlockETransformator : Vintagestory.API.Common.Block
 
 
     /// <summary>
-    /// ��������� ���������� � �������� � ���������
+    /// Получение информации о предмете в инвентаре
     /// </summary>
     /// <param name="inSlot"></param>
     /// <param name="dsc"></param>
@@ -69,5 +111,6 @@ public class BlockETransformator : Vintagestory.API.Common.Block
         base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
         dsc.AppendLine(Lang.Get("High Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
         dsc.AppendLine(Lang.Get("Low Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "lowVoltage", 0) + " " + Lang.Get("V"));
+        dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false)) ? Lang.Get("Yes") : Lang.Get("No")));
     }
 }

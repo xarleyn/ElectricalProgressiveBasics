@@ -18,7 +18,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     public BEBehaviorEAccumulator(BlockEntity blockEntity) : base(blockEntity)
     {
     }
-
+ 
     public bool isBurned => this.Block.Variant["status"] == "burned";
 
     public float lastCapacity=0;  //предыдущее значение емкости

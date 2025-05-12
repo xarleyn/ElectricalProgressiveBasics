@@ -1,15 +1,18 @@
 ﻿using ElectricalProgressive.Content.Block.ECable;
+using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using System.Linq;
 using Vintagestory.API.Common;
 
 namespace ElectricalProgressive.Content.Block.EConnector;
 
-public class BlockEntityEConnector : BlockEntityECable {
+public class BlockEntityEConnector : BlockEntityECable
+{
     private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
 
 
-    public override void OnBlockPlaced(ItemStack? byItemStack = null) {
+    public override void OnBlockPlaced(ItemStack? byItemStack = null)
+    {
         base.OnBlockPlaced(byItemStack);
 
         var electricity = this.ElectricalProgressive;
@@ -18,15 +21,16 @@ public class BlockEntityEConnector : BlockEntityECable {
             return;
 
 
-        if (electricity != null) {
+        if (electricity != null)
+        {
             electricity.Connection = Facing.AllAll;
 
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false),0);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 1);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 2);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 3);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 4);
-            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false), 5);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 0);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 1);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 2);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 3);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 4);
+            electricity.Eparams = (new EParams(128, 1024.0F, "", 0, 1, 1, false, false, true), 5);
 
         }
     }
@@ -60,4 +64,6 @@ public class BlockEntityEConnector : BlockEntityECable {
             }
         }
     }
+
+
 }

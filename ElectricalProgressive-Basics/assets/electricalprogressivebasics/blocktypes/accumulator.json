@@ -78,7 +78,8 @@
       "maxcapacity": 64000,
       "voltage": 32,
       "maxCurrent": 20.0,
-      "isolated": false,
+      "isolated": true,
+      "isolatedEnvironment": false,
       "power": 128.0,
       "rechargeable": true
     },
@@ -86,7 +87,8 @@
       "maxcapacity": 256000,
       "voltage": 128,
       "maxCurrent": 20.0,
-      "isolated": false,
+      "isolated": true,
+      "isolatedEnvironment": false,
       "power": 512.0,
       "rechargeable": false
     },

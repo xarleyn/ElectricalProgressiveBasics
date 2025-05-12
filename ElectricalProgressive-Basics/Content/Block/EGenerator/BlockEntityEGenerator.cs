@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -55,6 +56,7 @@ public class BlockEntityEGenerator : BlockEntity
             }
         }
     }
+
 
 
     public override void ToTreeAttributes(ITreeAttribute tree)

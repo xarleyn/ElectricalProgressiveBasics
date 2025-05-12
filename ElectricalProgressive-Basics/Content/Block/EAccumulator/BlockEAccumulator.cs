@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text;
+using ElectricalProgressive.Content.Block.EConnector;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
@@ -18,6 +20,47 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
         maxcapacity = MyMiniLib.GetAttributeInt(this, "maxcapacity", 16000);
         Durability = 100;
     }
+
+
+
+    /// <summary>
+    /// Кто-то или что-то коснулось блока и теперь получит урон
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="entity"></param>
+    /// <param name="pos"></param>
+    /// <param name="facing"></param>
+    /// <param name="collideSpeed"></param>
+    /// <param name="isImpact"></param>
+    public override void OnEntityCollide(
+        IWorldAccessor world,
+        Entity entity,
+        BlockPos pos,
+        BlockFacing facing,
+        Vec3d collideSpeed,
+        bool isImpact
+    )
+    {
+        // если это клиент, то не надо 
+        if (world.Side == EnumAppSide.Client)
+            return;
+
+        // энтити не живой и не создание? выходим
+        if (!entity.Alive || !entity.IsCreature)
+            return;
+
+        // получаем блокэнтити этого блока
+        var blockentity = (BlockEntityEAccumulator)world.BlockAccessor.GetBlockEntity(pos);
+
+        // если блокэнтити не найден, выходим
+        if (blockentity == null)
+            return;
+
+        // передаем работу в наш обработчик урона
+        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
+
+    }
+
 
     public int receiveEnergy(ItemStack itemstack, int maxReceive)
     {
@@ -67,6 +110,7 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
         dsc.AppendLine(Lang.Get("Storage")+": " + inSlot.Itemstack.Attributes.GetInt("electricalprogressive:energy", 0) + "/" + maxcapacity + " " + Lang.Get("J"));
         dsc.AppendLine(Lang.Get("Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
         dsc.AppendLine(Lang.Get("Power") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "power", 0) + " " + Lang.Get("W"));
+        dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false))? Lang.Get("Yes"): Lang.Get("No")));
     }
 
     public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1)
