@@ -141,7 +141,7 @@ public class BEBehaviorEGeneratorTier3 : BEBehaviorMPBase, IElectricProducer
     /// </summary>
     public float Produce_give()
     {
-        float speed = this.network?.Speed ?? 0.0F;
+        float speed = this.network?.Speed * GearedRatio ?? 0.0F;
 
         float power = (Math.Abs(speed) <= speed_max)                                        // Задаем форму кривых тока(мощности)
             ? Math.Abs(speed) / speed_max* I_max 
@@ -156,37 +156,32 @@ public class BEBehaviorEGeneratorTier3 : BEBehaviorMPBase, IElectricProducer
     public bool isBurned => this.Block.Variant["type"] == "burned";
 
 
-    public override float GetResistance()
-    {
-        return 0;
-    }
 
-
-    public override float GetTorque(long tick, float speed, out float resistance)
-    {
-        resistance = Resistance(speed);         // Вычисляем текущее сопротивление двигателя 
-
-        return 0.0F;
-    }
 
     /// <summary>
     /// Механическая сеть берет отсюда сопротивление этого генератора
     /// </summary>
-    public float Resistance(float spd)
+    /// <returns></returns>
+    public override float GetResistance()
     {
 
-        if (isBurned) //клиним ротор, если сгорел
+        if (isBurned)
         {
             return 9999.0F;
         }
 
-        
-        return (Math.Abs(spd) > speed_max)                                                                                      // Если скорость превышает максимальную, рассчитываем сопротивление как квадратичную
-            ? resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * (float)Math.Pow((Math.Abs(spd) / speed_max), 2f))   // Степенная зависимость, если скорость ушла за пределы двигателя              
-            : resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * Math.Abs(spd) / speed_max);                         // Линейное сопротивление для обычных скоростей
-                                                                                                                                                    //в таком виде будет лучше, иначе система выработки может встать колом, когда потребления больше выработки
-                                                                                                                                                    // сопротивление генератора также напрямую зависит от нагрузки в электрической цепи powerOrder 
+        var spd = Math.Abs(this.network?.Speed * GearedRatio ?? 0.0F);
+        float base_resistance = 0.05F; // Добавляем базовое сопротивление
+
+        return base_resistance +
+               ((spd > speed_max)
+                   ? resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * (float)Math.Pow((spd / speed_max), 2f))
+                   : resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * spd / speed_max));
+
+
     }
+
+
 
 
     public float getPowerGive()

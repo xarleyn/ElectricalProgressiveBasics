@@ -68,21 +68,21 @@
 
   "attributesByType": { //параметры генератора, менять на свой страх и риск
     "*-tier1-*": {
-      "params": [ 128.0, 0.6, 0.01, 0.5 ],
+      "params": [ 128.0, 0.5, 0.05, 0.5 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": true,
       "isolatedEnvironment": false
     },
     "*-tier2-*": {
-      "params": [ 256.0, 0.4, 0.01, 1.0 ],
+      "params": [ 256.0, 1.0, 0.15, 1.0 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": true,
       "isolatedEnvironment": false
     },
     "*-tier3-*": {
-      "params": [ 512.0, 0.2, 0.01, 1.0 ],
+      "params": [ 512.0, 1.0, 0.3, 2.0 ],
       "voltage": 128,
       "maxCurrent": 20.0,
       "isolated": true,

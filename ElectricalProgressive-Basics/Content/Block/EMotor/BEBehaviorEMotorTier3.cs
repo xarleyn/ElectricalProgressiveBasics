@@ -183,27 +183,25 @@ public class BEBehaviorEMotorTier3 : BEBehaviorMPBase, IElectricConsumer
 
 
     // не удалять
-    // никто не обращается к этой функции, когда работает GetTorque, но быть должна
     public override float GetResistance()
     {
-        return 0;
-    }
 
-
-    /// <summary>
-    /// Считаем сопротивление самого двигателя
-    /// </summary>
-    public float Resistance(float spd)
-    {
-        if (isBurned) //клиним ротор, если сгорел
+        if (isBurned)
         {
             return 9999.0F;
         }
 
-        return (Math.Abs(spd) > speed_max)                                          // Если скорость превышает максимальную, рассчитываем сопротивление как степенную зависимость
-            ? resistance_factor * (float)Math.Pow((Math.Abs(spd) / speed_max), 2f)  // Степенная зависимость, если скорость ушла за пределы двигателя   
-            : resistance_factor * Math.Abs(spd) / speed_max;                        // Линейное сопротивление для обычных скоростей
+        var spd = Math.Abs(Network?.Speed * GearedRatio ?? 0.0f);
+        float base_resistance = 0.05F; // Добавляем базовое сопротивление
+
+        return base_resistance +
+               ((Math.Abs(spd) > speed_max)
+                   ? resistance_factor * (float)Math.Pow((spd / speed_max), 2f)
+                   : resistance_factor * spd / speed_max);
+
+
     }
+
 
 
 
@@ -216,7 +214,7 @@ public class BEBehaviorEMotorTier3 : BEBehaviorMPBase, IElectricConsumer
     {
 
         torque = 0f;                            // Текущий крутящий момент
-        resistance = Resistance(speed);         // Вычисляем текущее сопротивление двигателя    
+        resistance = GetResistance();         // Вычисляем текущее сопротивление двигателя    
         I_value = 0;                           // Ток потребления
 
         float I_amount = this.powerReceive;     // Доступно тока/энергии 

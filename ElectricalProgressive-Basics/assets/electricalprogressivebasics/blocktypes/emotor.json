@@ -66,21 +66,21 @@
 
   "attributesByType": { //параметры двигателя, менять на свой страх и риск
     "*-tier1-*": {
-      "params": [ 10.0, 128.0, 0.5, 0.75, 0.5, 0.01 ],
+      "params": [ 10.0, 128.0, 0.5, 0.75, 0.5, 0.05 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": true,
       "isolatedEnvironment": false
     },
     "*-tier2-*": {
-      "params": [ 10.0, 256.0, 1.0, 0.85, 1.0, 0.01 ],
+      "params": [ 10.0, 256.0, 1.0, 0.85, 1.0, 0.15 ],
       "voltage": 32,
       "maxCurrent": 20.0,
       "isolated": true,
       "isolatedEnvironment": false
     },
     "*-tier3-*": {
-      "params": [ 10.0, 512.0, 1.0, 0.95, 2.0, 0.01 ],
+      "params": [ 10.0, 512.0, 2.0, 0.95, 1.0, 0.3 ],
       "voltage": 128,
       "maxCurrent": 20.0,
       "isolated": true,
