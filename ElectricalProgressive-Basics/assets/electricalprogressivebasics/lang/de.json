@@ -185,10 +185,12 @@
 
   "game:max_speed": "Nenn­drehzahl",
   "game:rps": "U/s",
-  "game:res_load": "Nenn­widerstand",
   "game:kpd": "Wirkungsgrad",
   "game:max_torque": "Max. Drehmoment",
   "game:WResistance": "Feuchtigkeitsbeständigkeit",
   "game:Yes": "Ja",
-  "game:No": "Nein"
+  "game:No": "Nein",
+
+  "game:res_load": "Nennwiderstand bei Nennbelastung",
+  "game:res_speed": "Nennwiderstand bei Nenngeschwindigkeit"
 }

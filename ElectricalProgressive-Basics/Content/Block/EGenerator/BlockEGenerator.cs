@@ -17,7 +17,7 @@ namespace ElectricalProgressive.Content.Block.EGenerator;
 public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBlock
 {
     private readonly static Dictionary<(Facing, string), MeshData> MeshData = new();
-    private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F };          //заглушка
+    private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };          //заглушка
 
     public override void OnUnloaded(ICoreAPI api)
     {
@@ -376,7 +376,9 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
 
         dsc.AppendLine(Lang.Get("Generation") + ": " + Params[0] + " " + Lang.Get("W"));
         dsc.AppendLine(Lang.Get("max_speed") + ": " + Params[1] + " " + Lang.Get("rps"));
+        dsc.AppendLine(Lang.Get("res_speed") + ": " + Params[2]);
         dsc.AppendLine(Lang.Get("res_load") + ": " + Params[3]);
+        dsc.AppendLine(Lang.Get("kpd") + ": " + Params[5] * 100 + " %");
         dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false)) ? Lang.Get("Yes") : Lang.Get("No")));
     }
 }

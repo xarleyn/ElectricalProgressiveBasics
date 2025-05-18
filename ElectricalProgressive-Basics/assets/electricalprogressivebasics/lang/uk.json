@@ -185,11 +185,13 @@
 
   "game:max_speed": "Ном. швидкість",
   "game:rps": "об/с",
-  "game:res_load": "Ном. опір",
   "game:kpd": "ККД",
   "game:max_torque": "Макс. момент",
 
   "game:WResistance": "Влагостійкість",
   "game:Yes": "Так",
-  "game:No": "Ні"
+  "game:No": "Ні",
+
+  "game:res_load": "Номінальний опір при номінальному навантаженні",
+  "game:res_speed": "Номінальний опір при номінальній швидкості"
 }

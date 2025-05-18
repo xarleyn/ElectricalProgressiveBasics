@@ -185,11 +185,13 @@
 
   "game:max_speed": "Nom. prędkość",
   "game:rps": "obr/s",
-  "game:res_load": "Nom. opór",
   "game:kpd": "Sprawność",
   "game:max_torque": "Maks. moment",
 
   "game:WResistance": "Odporność na wilgoć",
   "game:Yes": "Tak",
-  "game:No": "Nie"
+  "game:No": "Nie",
+
+  "game:res_load": "Rezystancja nominalna przy nominalnym obciążeniu",
+  "game:res_speed": "Rezystancja nominalna przy nominalnej prędkości"
 }

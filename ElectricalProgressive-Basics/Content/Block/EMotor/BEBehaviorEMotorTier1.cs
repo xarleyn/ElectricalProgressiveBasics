@@ -34,15 +34,15 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
     private static float kpd_max;               // Пиковый КПД
     private static float speed_max;             // Максимальная скорость вращения
     private static float resistance_factor;     // множитель сопротивления
-
+    private static float base_resistance;       // Базовое сопротивление
     private float torque;                       // Текущий крутящий момент
     private float I_value;                      // Ток потребления
     public float kpd;                           // КПД
 
-    private float[] def_Params = { 10.0F, 100.0F, 0.5F, 0.75F, 0.5F, 0.1F };   //заглушка
-    public float[] Params = { 0, 0, 0, 0, 0, 0 };                              //сюда берем параметры из ассетов
+    private float[] def_Params = { 10.0F, 100.0F, 0.5F, 0.75F, 0.5F, 0.1F, 0.05F };   //заглушка
+    public float[] Params = { 0, 0, 0, 0, 0, 0,0 };                              //сюда берем параметры из ассетов
 
-    private static float constanta = (I_max - I_min) / torque_max;
+
 
 
     /// <summary>
@@ -57,6 +57,7 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
         kpd_max = Params[3];
         speed_max = Params[4];
         resistance_factor = Params[5];
+        base_resistance = Params[6];
     }
 
 
@@ -107,7 +108,7 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
         4 => new[]
         {
             +0,
-            +1,
+            -1,
             +0
         },
         5 => new[]
@@ -116,7 +117,7 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
             +1,
             +0
         },
-        _ => throw new Exception()
+        _ => this.AxisSign
     };
 
 
@@ -195,14 +196,14 @@ public class BEBehaviorEMotorTier1 : BEBehaviorMPBase, IElectricConsumer
         }
 
         var spd = Math.Abs(Network?.Speed * GearedRatio ?? 0.0f);
-        float base_resistance = 0.05F; // Добавляем базовое сопротивление
+        
 
         return base_resistance +
                ((Math.Abs(spd) > speed_max)
                    ? resistance_factor * (float)Math.Pow((spd / speed_max), 2f)
                    : resistance_factor * spd / speed_max);
 
-        
+
     }
 
 

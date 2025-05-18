@@ -198,11 +198,14 @@
   "game:Low Voltage": "Низкое напряжение",
   "game:max_speed": "Ном. скорость",
   "game:rps": "об/c",
-  "game:res_load": "Ном. сопротивление",
+
   "game:kpd": "КПД",
   "game:max_torque": "Макс. момент",
 
   "game:WResistance": "Влагоустойчивость",
   "game:Yes": "Да",
-  "game:No": "Нет"
+  "game:No": "Нет",
+
+  "game:res_load": "Ном. сопротивление при ном. нагрузке",
+  "game:res_speed": "Ном. сопротивление при ном. скорости"
 }

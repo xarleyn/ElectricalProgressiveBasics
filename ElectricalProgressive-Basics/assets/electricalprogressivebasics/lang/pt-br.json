@@ -190,10 +190,12 @@
 
   "game:max_speed": "Velocidade nominal",
   "game:rps": "RPS",
-  "game:res_load": "Resistência nominal",
   "game:kpd": "Eficiência",
   "game:max_torque": "Torque máx.",
   "game:WResistance": "Resistência à umidade",
   "game:Yes": "Sim",
-  "game:No": "Não"
+  "game:No": "Não",
+
+  "game:res_load": "Resistência nominal sob carga nominal",
+  "game:res_speed": "Resistência nominal sob velocidade nominal"
 }

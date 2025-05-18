@@ -25,14 +25,16 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
     private static float speed_max;             // Максимальная скорость вращения
     private static float resistance_factor;     // Множитель сопротивления
     private static float resistance_load;       // Сопротивление нагрузки генератора
+    private static float base_resistance;       // базовое сопротивление
+    private static float kpd_max;               // КПД
 
-    private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F };          //заглушка
-    private static float[] Params = { 0, 0, 0, 0 };                              //сюда берем параметры из ассетов
+    private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };          //заглушка
+    private static float[] Params = { 0, 0, 0, 0, 0, 0 };                              //сюда берем параметры из ассетов
 
-
+    Random rnd = new Random(); //инициализируем рандомайзер системный
 
     // задает коэффициент сглаживания фильтра
-    public ExponentialMovingAverage emaFilter = new ExponentialMovingAverage(0.05);
+    public ExponentialMovingAverage emaFilter;
 
 
 
@@ -51,6 +53,8 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
         speed_max = Params[1];
         resistance_factor = Params[2];
         resistance_load = Params[3];
+        base_resistance = Params[4];
+        kpd_max = Params[5];
 
         AVGpowerOrder = 0;
     }
@@ -66,7 +70,7 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
 
     public BEBehaviorEGeneratorTier2(BlockEntity blockEntity) : base(blockEntity)
     {
-
+        emaFilter = new ExponentialMovingAverage(rnd.NextDouble() * 0.05f + 0.05f);
         GetParams();
     }
 
@@ -112,17 +116,18 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
         4 => new[]
         {
             +0,
-            +1,
+            -1,
             +0
         },
         5 => new[]
         {
             +0,
-            -1,
+            +1,
             +0
         },
         _ => this.AxisSign
     };
+
 
 
 
@@ -175,13 +180,20 @@ public class BEBehaviorEGeneratorTier2 : BEBehaviorMPBase, IElectricProducer
 
         var spd = Math.Abs(this.network?.Speed * GearedRatio ?? 0.0F);
         float base_resistance = 0.05F; // Добавляем базовое сопротивление
+        float kpd_max = 0.85F; // Максимальный КПД
 
-        return base_resistance +
+
+        var res = base_resistance +
                ((spd > speed_max)
                    ? resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * (float)Math.Pow((spd / speed_max), 2f))
                    : resistance_load * (Math.Min(AVGpowerOrder, I_max) / I_max) + (resistance_factor * spd / speed_max));
 
 
+
+        res /= kpd_max; // Учитываем КПД
+
+
+        return res;
     }
 
 

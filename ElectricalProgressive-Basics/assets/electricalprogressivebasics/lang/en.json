@@ -191,10 +191,13 @@
 
   "game:max_speed": "Rated speed",
   "game:rps": "RPS",
-  "game:res_load": "Rated resistance",
+
   "game:kpd": "Efficiency",
   "game:max_torque": "Max. torque",
   "game:WResistance": "Moisture resistance",
   "game:Yes": "Yes",
-  "game:No": "No"
+  "game:No": "No",
+
+  "game:res_load": "Nominal resistance at nominal load",
+  "game:res_speed": "Nominal resistance at nominal speed"
 }

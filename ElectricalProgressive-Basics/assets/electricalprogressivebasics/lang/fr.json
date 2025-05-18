@@ -190,10 +190,12 @@
 
   "game:max_speed": "Vitesse nom.",
   "game:rps": "tr/s",
-  "game:res_load": "Résist. nom.",
   "game:kpd": "Rendement",
   "game:max_torque": "Couple max.",
   "game:WResistance": "Résistance à l'humidité",
   "game:Yes": "Oui",
-  "game:No": "Non"
+  "game:No": "Non",
+
+  "game:res_load": "Résistance nominale à la charge nominale",
+  "game:res_speed": "Résistance nominale à la vitesse nominale"
 }
