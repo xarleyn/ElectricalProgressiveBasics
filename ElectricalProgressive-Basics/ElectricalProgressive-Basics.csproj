@@ -63,6 +63,7 @@
     <ItemGroup>
       <Folder Include="assets\electricalprogressivebasics\shapes\entity\" />
       <Folder Include="assets\electricalprogressivebasics\textures\block\metal\" />
+      <Folder Include="assets\game\itemtypes\resource\" />
     </ItemGroup>
     <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>
