@@ -31,7 +31,6 @@ public class BEBehaviorEGeneratorTier1 : BEBehaviorMPBase, IElectricProducer
     private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };          //заглушка
     private static float[] Params = { 0, 0, 0, 0, 0 ,0 };                              //сюда берем параметры из ассетов
 
-    Random rnd = new Random(); //инициализируем рандомайзер системный
 
     // задает коэффициент сглаживания фильтра
     public ExponentialMovingAverage emaFilter;
@@ -71,7 +70,7 @@ public class BEBehaviorEGeneratorTier1 : BEBehaviorMPBase, IElectricProducer
 
     public BEBehaviorEGeneratorTier1(BlockEntity blockEntity) : base(blockEntity)
     {
-        emaFilter = new ExponentialMovingAverage(rnd.NextDouble()*0.05f+0.05f);
+        emaFilter = new ExponentialMovingAverage(0.05f);
         GetParams();
     }
 
