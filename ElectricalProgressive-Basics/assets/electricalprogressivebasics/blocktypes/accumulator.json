@@ -73,6 +73,12 @@
     }
   },
 
+  "durabilityByType": {
+    "*-tier1-normal": 3200,
+    "*-tier2-normal": 12800,
+    "*-burned": 0
+  },
+
   "attributesByType": {
     "*-tier1-normal": {
       "maxcapacity": 64000,
@@ -81,7 +87,8 @@
       "isolated": true,
       "isolatedEnvironment": false,
       "power": 128.0,
-      "rechargeable": true
+      "chargable": true,
+      "consume": 20
     },
     "*-tier2-normal": {
       "maxcapacity": 256000,
@@ -90,10 +97,11 @@
       "isolated": true,
       "isolatedEnvironment": false,
       "power": 512.0,
-      "rechargeable": false
+      "chargable": false,
+      "consume": 20     
     },
     "*": {
-      "rechargeable": false
+      "chargable": false
     }
   },
 
@@ -102,6 +110,7 @@
   },
 
   "resistance": 1,
+  
   "drawType": "JSON",
   "lightAbsorption": 0.0,
   "faceCullMode": "NeverCull",

@@ -25,13 +25,17 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
 
     public float capacity;  //текущая емкость (сохраняется)
 
+    public float maxCapacity => MyMiniLib.GetAttributeInt(this.Block, "maxcapacity", 16000);
+
+    float multFromDurab= 1.0F;
+
     public new BlockPos Pos => this.Blockentity.Pos;
 
     public float power => MyMiniLib.GetAttributeFloat(this.Block, "power", 128.0F);   //мощность батареи!!!!!!!
 
     public float GetMaxCapacity()
     {
-        return MyMiniLib.GetAttributeInt(this.Block, "maxcapacity", 16000);
+        return maxCapacity* multFromDurab;
     }
 
     public float GetCapacity()
@@ -43,8 +47,10 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     /// Задает сразу емкость аккумулятору (вызывать только при установке аккумулятора)
     /// </summary>
     /// <returns></returns>
-    public void SetCapacity(float value)
+    public void SetCapacity(float value, float multDurab=1.0F)
     {
+        multFromDurab = multDurab;  
+
         capacity = (value > GetMaxCapacity())
             ? GetMaxCapacity()
             : value;
