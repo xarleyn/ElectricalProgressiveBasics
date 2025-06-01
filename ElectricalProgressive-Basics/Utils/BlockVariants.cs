@@ -21,8 +21,7 @@ public class BlockVariants
     /// <param name="indexType"></param>
     public BlockVariants(ICoreAPI api, CollectibleObject baseBlock, int indexVoltage, string material, int indexQuantity, int indexType)
     {
-        //if (indexVoltage == 0)
-        //    return;
+
 
         string[] t = new string[4];
         string[] v = new string[4];
