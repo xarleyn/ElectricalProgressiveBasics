@@ -1,20 +1,16 @@
-﻿using System;
+﻿using ElectricalProgressive.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ElectricalProgressive.Content.Block.EConnector;
-using ElectricalProgressive.Content.Block.EMotor;
-using ElectricalProgressive.Utils;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.EGenerator;
 
-public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBlock
+public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
 {
     private readonly static Dictionary<(Facing, string), MeshData> MeshData = new();
     private static float[] def_Params = { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };          //заглушка
@@ -22,7 +18,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
     public override void OnUnloaded(ICoreAPI api)
     {
         base.OnUnloaded(api);
-        BlockEGenerator.MeshData.Clear();
+        MeshData.Clear();
     }
 
     public MechanicalNetwork? GetNetwork(IWorldAccessor world, BlockPos pos)
@@ -50,45 +46,6 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
     {
     }
 
-
-    /// <summary>
-    /// Кто-то или что-то коснулось блока и теперь получит урон
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="entity"></param>
-    /// <param name="pos"></param>
-    /// <param name="facing"></param>
-    /// <param name="collideSpeed"></param>
-    /// <param name="isImpact"></param>
-    public override void OnEntityCollide(
-        IWorldAccessor world,
-        Entity entity,
-        BlockPos pos,
-        BlockFacing facing,
-        Vec3d collideSpeed,
-        bool isImpact
-    )
-    {
-        // если это клиент, то не надо 
-        if (world.Side == EnumAppSide.Client)
-            return;
-
-        // энтити не живой и не создание? выходим
-        if (!entity.Alive || !entity.IsCreature)
-            return;
-
-        // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityEGenerator)world.BlockAccessor.GetBlockEntity(pos);
-
-        // если блокэнтити не найден, выходим
-         if (blockentity == null)
-            return;
-
-        // передаем работу в наш обработчик урона
-        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
-
-    }
-
     public override void OnLoaded(ICoreAPI coreApi)
     {
         base.OnLoaded(coreApi);
@@ -98,18 +55,18 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
         BlockSelection blockSel, ref string failureCode)
     {
         var selection = new Selection(blockSel);
-        Facing facing=Facing.None;
+        Facing facing = Facing.None;
 
         try
         {
             facing = FacingHelper.From(selection.Face, selection.Direction);
         }
-        catch 
+        catch
         {
             return false;
         }
 
-        
+
         if (
             FacingHelper.Faces(facing).First() is { } blockFacing &&
             !world.BlockAccessor
@@ -159,7 +116,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
             var isolatedEnvironment = MyMiniLib.GetAttributeBool(this, "isolatedEnvironment", false);
 
             entity.Eparams = (
-                new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
+                new(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
                 FacingHelper.Faces(facing).First().Index);
 
 
@@ -202,16 +159,13 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
         }
     }
 
-    
-
-
     public override void OnJsonTesselation(ref MeshData sourceMesh, ref int[] lightRgbsByCorner, BlockPos pos,
         Vintagestory.API.Common.Block[] chunkExtBlocks, int extIndex3d)
     {
         base.OnJsonTesselation(ref sourceMesh, ref lightRgbsByCorner, pos, chunkExtBlocks, extIndex3d);
 
-        if (this.api is ICoreClientAPI clientApi &&
-            this.api.World.BlockAccessor.GetBlockEntity(pos) is BlockEntityEGenerator entity &&
+        if (api is ICoreClientAPI clientApi &&
+            api.World.BlockAccessor.GetBlockEntity(pos) is BlockEntityEGenerator entity &&
             entity.Facing != Facing.None
            )
         {
@@ -220,7 +174,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
             var facing = entity.Facing;   //куда смотрит генератор
             string code = entity.Block.Code; //код блока
 
-            if (!BlockEGenerator.MeshData.TryGetValue((facing, code), out var meshData))
+            if (!MeshData.TryGetValue((facing, code), out var meshData))
             {
                 var origin = new Vec3f(0.5f, 0.5f, 0.5f);
                 var block = clientApi.World.BlockAccessor.GetBlockEntity(pos).Block;
@@ -352,7 +306,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
                     meshData.Rotate(origin, 0.0f, 90.0f * GameMath.DEG2RAD, 0.0f);
                 }
 
-                BlockEGenerator.MeshData.Add((facing, code), meshData);
+                MeshData.Add((facing, code), meshData);
             }
 
             sourceMesh = meshData;
@@ -372,7 +326,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
         base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
         dsc.AppendLine(Lang.Get("Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
 
-        float[] Params = MyMiniLib.GetAttributeArrayFloat(inSlot.Itemstack.Block, "params", def_Params);
+        var Params = MyMiniLib.GetAttributeArrayFloat(inSlot.Itemstack.Block, "params", def_Params);
 
         dsc.AppendLine(Lang.Get("Generation") + ": " + Params[0] + " " + Lang.Get("W"));
         dsc.AppendLine(Lang.Get("max_speed") + ": " + Params[1] + " " + Lang.Get("rps"));

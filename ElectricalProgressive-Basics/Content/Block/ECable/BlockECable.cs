@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Cairo.Freetype;
-using ElectricalProgressive.Content.Block.ECable;
-using ElectricalProgressive.Content.Block.ESwitch;
+﻿using ElectricalProgressive.Content.Block.ESwitch;
 using ElectricalProgressive.Utils;
 using HarmonyLib;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
-using Vintagestory.API.Util;
-using Vintagestory.GameContent;
-using Vintagestory.ServerMods.NoObf;
 
 namespace ElectricalProgressive.Content.Block.ECable
 {
-    public class BlockECable : Vintagestory.API.Common.Block
+    public class BlockECable : BlockEBase
     {
         private readonly static ConcurrentDictionary<CacheDataKey, Dictionary<Facing, Cuboidf[]>> CollisionBoxesCache = new();
 
@@ -36,26 +27,26 @@ namespace ElectricalProgressive.Content.Block.ECable
         public float res;                       //удельное сопротивление из ассета
         public float maxCurrent;                //максимальный ток из ассета
         public float crosssectional;            //площадь сечения из ассета
-        public string material="";              //материал из ассета
-        
+        public string material = "";              //материал из ассета
+
 
         private ICoreAPI api;
 
 
 
-        public static readonly Dictionary<int, string> voltages = new Dictionary<int, string>
+        public static readonly Dictionary<int, string> voltages = new()
         {
             { 32, "32v" },
             { 128, "128v" }
         };
 
-        public static readonly Dictionary<string, int> voltagesInvert = new Dictionary<string, int>
+        public static readonly Dictionary<string, int> voltagesInvert = new()
         {
             { "32v", 32 },
             { "128v", 128 }
         };
 
-        public static Dictionary<int, string> quantitys = new Dictionary<int, string>
+        public static Dictionary<int, string> quantitys = new()
         {
             { 1, "single" },
             { 2, "double" },
@@ -63,7 +54,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             { 4, "quadruple"}
         };
 
-        public static Dictionary<int, string> types = new Dictionary<int, string>
+        public static Dictionary<int, string> types = new()
         {
             { 0, "dot" },
             { 1, "part" },
@@ -75,11 +66,6 @@ namespace ElectricalProgressive.Content.Block.ECable
             { 7, "dot_isolated" }
         };
 
-
-
-
-
-
         public override void OnLoaded(ICoreAPI api)
         {
             base.OnLoaded(api);
@@ -87,17 +73,12 @@ namespace ElectricalProgressive.Content.Block.ECable
             this.api = api;
 
             // предзагрузка ассетов выключателя
-            {
-                var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
-                var block = api.World.BlockAccessor.GetBlock(assetLocation);
+            var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
+            var block = api.World.BlockAccessor.GetBlock(assetLocation);
 
-                enabledSwitchVariant = new BlockVariant(api, block, "enabled");
-                disabledSwitchVariant = new BlockVariant(api, block, "disabled");
-            }
-
+            enabledSwitchVariant = new(api, block, "enabled");
+            disabledSwitchVariant = new(api, block, "disabled");
         }
-
-
 
         public override void OnUnloaded(ICoreAPI api)
         {
@@ -107,50 +88,6 @@ namespace ElectricalProgressive.Content.Block.ECable
             BlockECable.MeshDataCache.Clear();
 
         }
-
-
-
-        /// <summary>
-        /// Кто-то или что-то коснулось блока и теперь получит урон
-        /// </summary>
-        /// <param name="world"></param>
-        /// <param name="entity"></param>
-        /// <param name="pos"></param>
-        /// <param name="facing"></param>
-        /// <param name="collideSpeed"></param>
-        /// <param name="isImpact"></param>
-        public override void OnEntityCollide(
-            IWorldAccessor world,
-            Entity entity,
-            BlockPos pos,
-            BlockFacing facing,
-            Vec3d collideSpeed,
-            bool isImpact
-        )
-        {
-            // если это клиент, то не надо 
-            if (world.Side == EnumAppSide.Client)
-                return;
-
-            // энтити не живой и не создание? выходим
-            if (!entity.Alive || !entity.IsCreature)
-                return;
-
-
-            // получаем блокэнтити этого блока
-            var blockentity = (BlockEntityECable)world.BlockAccessor.GetBlockEntity(pos);
-
-            // если блокэнтити не найден, выходим
-            if (blockentity == null)
-                return;
-
-            // передаем работу в наш обработчик урона
-            ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
-
-        }
-
-
-
 
         public override bool IsReplacableBy(Vintagestory.API.Common.Block block)
         {
@@ -204,7 +141,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                             lines++;                                                                //приращиваем линии
                             if (byPlayer.WorldData.CurrentGameMode != EnumGameMode.Creative)        //чтобы в креативе не уменьшало стак
                             {
-                                byItemStack!.StackSize -= FacingHelper.Count(faceCoonections) - 1;   //отнимаем у игрока столько же, сколько установили
+                                byItemStack.StackSize -= FacingHelper.Count(faceCoonections) - 1;   //отнимаем у игрока столько же, сколько установили
                             }
 
                             entity.AllEparams[FacingHelper.Faces(facing).First().Index].lines = lines; //применяем линии
@@ -317,7 +254,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
 
 
-                    
+
                     int indexV = voltagesInvert[byItemStack.Block.Variant["voltage"]];    //определяем индекс напряжения                        
                     bool iso = byItemStack.Block.Code.ToString().Contains("isolated")     //определяем изоляцию
                         ? true
@@ -330,14 +267,14 @@ namespace ElectricalProgressive.Content.Block.ECable
                     res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
                     maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
                     crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
-                    
+
 
 
                     //линий 0? Значит грань была пустая    
                     if (lines == 0)
                     {
                         entity.Eparams = (
-                            new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
+                            new(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
                             FacingHelper.Faces(facing).First().Index);
 
                         entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -366,7 +303,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                             }
 
                             entity.Eparams = (
-                                new EParams(indexV, maxCurrent, material, res, lines, crosssectional, false, iso, isolatedEnvironment),
+                                new(indexV, maxCurrent, material, res, lines, crosssectional, false, iso, isolatedEnvironment),
                                 FacingHelper.Faces(facing).First().Index);
 
                             entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -497,7 +434,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                     entity.Connection = facing;       //сообщаем направление
                     entity.Eparams = (
-                        new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
+                        new(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
                         FacingHelper.Faces(facing).First().Index);
 
                     entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
@@ -593,21 +530,21 @@ namespace ElectricalProgressive.Content.Block.ECable
                                 connection = selectedFacing & FacingHelper.FromFace(face);                   //берем направления только в этой грани
 
                                 if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                                    entity.AllEparams[face.Index] = new EParams();
+                                    entity.AllEparams[face.Index] = new();
 
                                 stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
 
                                 ItemStack itemStack = null!;
                                 if (burn)       //если сгорело, то бросаем кусочки металла
                                 {
-                                    AssetLocation assetLoc = new AssetLocation("metalbit-" + material);
+                                    AssetLocation assetLoc = new("metalbit-" + material);
                                     var item = api.World.GetItem(assetLoc);
-                                    itemStack = new ItemStack(item, stackSize);
+                                    itemStack = new(item, stackSize);
                                 }
                                 else
                                 {
                                     var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1); //берем ассет блока кабеля
-                                    itemStack = new ItemStack(block, stackSize);
+                                    itemStack = new(block, stackSize);
                                 }
 
                                 world.SpawnItemEntity(itemStack, position.ToVec3d());
@@ -636,52 +573,50 @@ namespace ElectricalProgressive.Content.Block.ECable
         /// <returns></returns>
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1)
         {
-            if (world.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity)
+            if (world.BlockAccessor.GetBlockEntity(position) is not BlockEntityECable entity)
+                return base.GetDrops(world, position, byPlayer, dropQuantityMultiplier);
+
+            var itemStacks = new ItemStack[] { };
+
+            var connection = entity.Connection;
+
+            foreach (var face in FacingHelper.Faces(entity.Connection))         //перебираем все грани выделенных кабелей
             {
-                ItemStack[] itemStacks = new ItemStack[] { };
+                var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
+                var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
+                var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
+                var isolated = entity.AllEparams[face.Index].isolated;          //изолировано ли?
+                var burnout = entity.AllEparams[face.Index].burnout;          //сгорело ли?
 
-                var connection = entity.Connection;
+                connection = entity.Connection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
 
-                foreach (var face in FacingHelper.Faces(entity.Connection))         //перебираем все грани выделенных кабелей
+                if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
+                    entity.AllEparams[face.Index] = new();
+
+                var stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
+
+                var itemStack = default(ItemStack?);
+
+                // если сгорело, то бросаем кусочки металла
+                if (burnout)
                 {
-                    var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
-                    var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
-                    var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
-                    var isol = entity.AllEparams[face.Index].isolated;          //изолировано ли?
-                    var burn = entity.AllEparams[face.Index].burnout;          //сгорело ли?
-
-
-                    connection = entity.Connection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
-
-                    if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                        entity.AllEparams[face.Index] = new EParams();
-
-                    var stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
-
-                    ItemStack itemStack = null!;
-                    if (burn)       //если сгорело, то бросаем кусочки металла
-                    {
-                        AssetLocation assetLoc = new AssetLocation("metalbit-" + material);
-                        var item = api.World.GetItem(assetLoc);
-                        itemStack = new ItemStack(item, stackSize);
-                    }
-                    else
-                    {
-                        var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1); //берем ассет блока кабеля
-                        itemStack = new ItemStack(block, stackSize);
-                    }
-
-                    itemStacks = itemStacks.AddToArray<ItemStack>(itemStack);
+                    var assetLoc = new AssetLocation("metalbit-" + material);
+                    var item = api.World.GetItem(assetLoc);
+                    itemStack = new(item, stackSize);
+                }
+                else
+                {
+                    //берем ассет блока кабеля
+                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isolated ? 6 : 1);
+                    itemStack = new(block, stackSize);
                 }
 
-
-                return itemStacks;
+                itemStacks = itemStacks.AddToArray(itemStack);
             }
 
-            return base.GetDrops(world, position, byPlayer, dropQuantityMultiplier);
+            return itemStacks;
+
         }
-
-
 
         /// <summary>
         /// Обновился соседний блок
@@ -693,94 +628,81 @@ namespace ElectricalProgressive.Content.Block.ECable
         {
             base.OnNeighbourBlockChange(world, pos, neibpos);
 
-            if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityECable entity)
+            if (world.BlockAccessor.GetBlockEntity(pos) is not BlockEntityECable entity)
+                return;
+
+            var blockFacing = BlockFacing.FromVector(neibpos.X - pos.X, neibpos.Y - pos.Y, neibpos.Z - pos.Z);
+            var selectedFacing = FacingHelper.FromFace(blockFacing);
+
+            var delayReturn = false;
+            if ((entity.Connection & ~selectedFacing) == Facing.None)
             {
-                var blockFacing = BlockFacing.FromVector(neibpos.X - pos.X, neibpos.Y - pos.Y, neibpos.Z - pos.Z);
-                var selectedFacing = FacingHelper.FromFace(blockFacing);
+                world.BlockAccessor.BreakBlock(pos, null);
 
-                bool delayreturn = false;
-                if ((entity.Connection & ~selectedFacing) == Facing.None)
+                delayReturn = true;
+                //return;
+            }
+
+            //ломаем выключатели
+            var selectedSwitches = entity.Switches & selectedFacing;
+            if (selectedSwitches != Facing.None)
+            {
+                var switchStackSize = FacingHelper.Faces(selectedSwitches).Count();
+                if (switchStackSize > 0)
                 {
-                    world.BlockAccessor.BreakBlock(pos, null);
-
-                    delayreturn = true;
-                    //return;
+                    var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
+                    var block = world.BlockAccessor.GetBlock(assetLocation);
+                    var itemStack = new ItemStack(block, switchStackSize);
+                    world.SpawnItemEntity(itemStack, pos.ToVec3d());
                 }
 
+                entity.Switches &= ~selectedFacing;
+            }
 
-                //ломаем выключатели
-                var selectedSwitches = entity.Switches & selectedFacing;
+            if (delayReturn)
+                return;
 
-                if (selectedSwitches != Facing.None)
+            //ломаем провода
+            var selectedConnection = entity.Connection & selectedFacing;
+            if (selectedConnection == Facing.None)
+                return;
+
+            //соединений выделено
+            var connectionStackSize = FacingHelper.Count(selectedConnection);
+            if (connectionStackSize <= 0)
+                return;
+
+            entity.Connection &= ~selectedConnection;
+
+            foreach (var face in FacingHelper.Faces(selectedConnection))         //перебираем все грани выделенных кабелей
+            {
+                var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
+                var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
+                var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
+                var isolated = entity.AllEparams[face.Index].isolated;          //изолировано ли?
+                var burnout = entity.AllEparams[face.Index].burnout;          //сгорело ли?
+
+                var connection = selectedConnection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
+
+                if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
+                    entity.AllEparams[face.Index] = new();
+
+                connectionStackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
+
+                var itemStack = default(ItemStack?);
+                if (burnout)       //если сгорело, то бросаем кусочки металла
                 {
-                    var stackSize = FacingHelper.Faces(selectedSwitches).Count();
-
-                    if (stackSize > 0)
-                    {
-                        var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
-                        var block = world.BlockAccessor.GetBlock(assetLocation);
-                        var itemStack = new ItemStack(block, stackSize);
-                        world.SpawnItemEntity(itemStack, pos.ToVec3d());
-                    }
-
-                    entity.Switches &= ~selectedFacing;
-
+                    AssetLocation assetLoc = new("metalbit-" + material);
+                    var item = api.World.GetItem(assetLoc);
+                    itemStack = new(item, connectionStackSize);
+                }
+                else
+                {
+                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isolated ? 6 : 1); //берем ассет блока кабеля
+                    itemStack = new(block, connectionStackSize);
                 }
 
-                if (delayreturn)
-                    return;
-
-                //ломаем провода
-                var selectedConnection = entity.Connection & selectedFacing;
-
-                if (selectedConnection != Facing.None)
-                {
-                    var stackSize = FacingHelper.Count(selectedConnection);    //соединений выделено
-
-                    if (stackSize > 0)
-                    {
-                        entity.Connection &= ~selectedConnection;
-
-                        foreach (var face in FacingHelper.Faces(selectedConnection))         //перебираем все грани выделенных кабелей
-                        {
-                            var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
-                            var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
-                            var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
-                            var isol = entity.AllEparams[face.Index].isolated;          //изолировано ли?
-                            var burn = entity.AllEparams[face.Index].burnout;          //сгорело ли?
-
-
-
-                            var connection = selectedConnection & FacingHelper.FromFace(face);                   //берем направления только в этой грани
-
-                            if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                                entity.AllEparams[face.Index] = new EParams();
-
-                            stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
-
-                            ItemStack itemStack = null!;
-                            if (burn)       //если сгорело, то бросаем кусочки металла
-                            {
-                                AssetLocation assetLoc = new AssetLocation("metalbit-" + material);
-                                var item = api.World.GetItem(assetLoc);
-                                itemStack = new ItemStack(item, stackSize);
-                            }
-                            else
-                            {
-                                var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1); //берем ассет блока кабеля
-                                itemStack = new ItemStack(block, stackSize);
-                            }
-
-                            world.SpawnItemEntity(itemStack, pos.ToVec3d());
-
-
-                        }
-
-
-
-                    }
-
-                }
+                world.SpawnItemEntity(itemStack, pos.ToVec3d());
             }
         }
 
@@ -794,10 +716,7 @@ namespace ElectricalProgressive.Content.Block.ECable
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
         {
             if (this.api is ICoreClientAPI)
-            {
                 return true;
-            }
-
 
             //это кабель?
             if (world.BlockAccessor.GetBlockEntity(blockSel.Position) is BlockEntityECable entity)
@@ -808,10 +727,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                 var sf = new SelectionFacingCable();
                 var selectedFacing = sf.SelectionFacing(key, hitPosition, entity);  //выделяем грань выключателя
 
-
-
                 var selectedSwitches = selectedFacing & entity.Switches;
-
                 if (selectedSwitches != 0)
                 {
                     entity.SwitchesState ^= selectedSwitches;
@@ -831,8 +747,7 @@ namespace ElectricalProgressive.Content.Block.ECable
         /// <returns></returns>
         public override Cuboidf[] GetSelectionBoxes(IBlockAccessor blockAccessor, BlockPos position)
         {
-
-            if (blockAccessor.GetBlockEntity(position) is BlockEntityECable entity && entity != null && entity.AllEparams != null)
+            if (blockAccessor.GetBlockEntity(position) is BlockEntityECable { AllEparams: not null } entity)
             {
                 var key = CacheDataKey.FromEntity(entity);
 
@@ -858,8 +773,7 @@ namespace ElectricalProgressive.Content.Block.ECable
         /// <returns></returns>
         public override Cuboidf[] GetCollisionBoxes(IBlockAccessor blockAccessor, BlockPos position)
         {
-
-            if (blockAccessor.GetBlockEntity(position) is BlockEntityECable entity && entity != null && entity.AllEparams != null)
+            if (blockAccessor.GetBlockEntity(position) is BlockEntityECable { AllEparams: not null } entity)
             {
                 var key = CacheDataKey.FromEntity(entity);
 
@@ -872,7 +786,6 @@ namespace ElectricalProgressive.Content.Block.ECable
                     .Distinct()
                     .ToArray();
             }
-
 
             return base.GetSelectionBoxes(blockAccessor, position);
         }
@@ -901,7 +814,8 @@ namespace ElectricalProgressive.Content.Block.ECable
         /// <param name="extIndex3d"></param>
         public override void OnJsonTesselation(ref MeshData sourceMesh, ref int[] lightRgbsByCorner, BlockPos position, Vintagestory.API.Common.Block[] chunkExtBlocks, int extIndex3d)
         {
-            if (this.api.World.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity && entity.Connection != Facing.None && entity.AllEparams != null && entity.Block.Code.ToString().Contains("ecable"))
+            if (this.api.World.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity
+                && entity.Connection != Facing.None && entity.AllEparams != null && entity.Block.Code.ToString().Contains("ecable"))
             {
                 var key = CacheDataKey.FromEntity(entity);
 
@@ -910,8 +824,8 @@ namespace ElectricalProgressive.Content.Block.ECable
                     var origin = new Vec3f(0.5f, 0.5f, 0.5f);
                     var origin0 = new Vec3f(0f, 0f, 0f);
 
-                    Random rnd = new Random(); //инициализируем рандомайзер системный
-
+                    // инициализируем рандомайзер системный
+                    var rnd = new Random();
 
                     // рисуем на северной грани
                     if ((key.Connection & Facing.NorthAll) != 0)
@@ -927,10 +841,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, material, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, material, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, material, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, material, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, material, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -968,7 +882,6 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на восточной грани
                     if ((key.Connection & Facing.EastAll) != 0)
                     {
-
                         var indexV = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].voltage; //индекс напряжения этой грани
                         var indexM = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].material; //индекс материала этой грани
                         var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].lines; //индекс линий этой грани
@@ -980,10 +893,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -1030,10 +943,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -1080,10 +993,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -1130,10 +1043,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -1180,10 +1093,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                         BlockVariants partVariant;
                         if (!indexB)
                         {
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, isol ? 6 : 1);  //получаем шейп нужного кабеля изолированного или целого
                         }
                         else
-                            partVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
+                            partVariant = new(api, entity.Block, indexV, indexM, indexQ, 3);  //получаем шейп нужного кабеля сгоревшего
 
                         var fixVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, 4);   //получаем шейп крепления кабеля
 
@@ -1583,7 +1496,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             {
                 var origin = new Vec3d(0.5, 0.5, 0.5);
 
-                boxesCache[key] = boxes = new Dictionary<Facing, Cuboidf[]>();
+                boxesCache[key] = boxes = new();
 
                 // Connections
                 if ((key.Connection & Facing.NorthAll) != 0)
@@ -1676,8 +1589,6 @@ namespace ElectricalProgressive.Content.Block.ECable
                         boxes.Add(Facing.EastDown, partBoxes.Select(selectionBox => selectionBox.RotatedCopy(270.0f, 0.0f, 90.0f, origin)).ToArray());
                     }
                 }
-
-
 
                 if ((key.Connection & Facing.SouthAll) != 0)
                 {
@@ -2167,8 +2078,6 @@ namespace ElectricalProgressive.Content.Block.ECable
                 boxes.Add(Facing.NorthAll, entity.Block.CollisionBoxes);
             }
 
-
-
             return boxes;
         }
 
@@ -2199,8 +2108,6 @@ namespace ElectricalProgressive.Content.Block.ECable
             }
         }
 
-
-
         /// <summary>
         /// Получение информации о предмете в инвентаре
         /// </summary>
@@ -2211,14 +2118,12 @@ namespace ElectricalProgressive.Content.Block.ECable
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            string text = inSlot.Itemstack.Block.Variant["voltage"]; 
+            string text = inSlot.Itemstack.Block.Variant["voltage"];
             dsc.AppendLine(Lang.Get("Voltage") + ": " + text.Substring(0, text.Length - 1) + " " + Lang.Get("V"));
             dsc.AppendLine(Lang.Get("Max. current") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "maxCurrent", 0) + " " + Lang.Get("A"));
             dsc.AppendLine(Lang.Get("Resistivity") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "res", 0) + " " + Lang.Get("units"));
             dsc.AppendLine(Lang.Get("WResistance") + ": " + (inSlot.Itemstack.Block.Code.Path.Contains("isolated") ? Lang.Get("Yes") : Lang.Get("No")));
         }
-
-
 
         /// <summary>
         /// Структура для хранения ключей для словарей
@@ -2241,7 +2146,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             public static CacheDataKey FromEntity(BlockEntityECable entityE)
             {
                 EParams[] bufAllEparams = entityE.AllEparams.ToArray();
-                return new CacheDataKey(
+                return new(
                     entityE.Connection,
                     entityE.Switches,
                     entityE.SwitchesState,

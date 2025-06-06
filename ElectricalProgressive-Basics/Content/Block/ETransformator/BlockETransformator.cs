@@ -1,23 +1,13 @@
-﻿using System;
+﻿using ElectricalProgressive.Utils;
 using System.Text;
-using ElectricalProgressive.Content.Block.EConnector;
-using ElectricalProgressive.Interface;
-using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace ElectricalProgressive.Content.Block.ETransformator;
 
-public class BlockETransformator : Vintagestory.API.Common.Block
+public class BlockETransformator : BlockEBase
 {
-    public override void OnLoaded(ICoreAPI api)
-    {
-        base.OnLoaded(api);
-    }
-
-
     public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack,
         BlockSelection blockSel, ref string failureCode)
     {
@@ -40,64 +30,6 @@ public class BlockETransformator : Vintagestory.API.Common.Block
             world.BlockAccessor.BreakBlock(pos, null);
         }
     }
-
-
-    /// <summary>
-    /// Кто-то или что-то коснулось блока и теперь получит урон
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="entity"></param>
-    /// <param name="pos"></param>
-    /// <param name="facing"></param>
-    /// <param name="collideSpeed"></param>
-    /// <param name="isImpact"></param>
-    public override void OnEntityCollide(
-        IWorldAccessor world,
-        Entity entity,
-        BlockPos pos,
-        BlockFacing facing,
-        Vec3d collideSpeed,
-        bool isImpact
-    )
-    {
-        // если это клиент, то не надо 
-        if (world.Side == EnumAppSide.Client)
-            return;
-
-        // энтити не живой и не создание? выходим
-        if (!entity.Alive || !entity.IsCreature)
-            return;
-
-        // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityETransformator)world.BlockAccessor.GetBlockEntity(pos);
-
-        // если блокэнтити не найден, выходим
-        if (blockentity == null)
-            return;
-
-        // передаем работу в наш обработчик урона
-        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
-
-    }
-
-
-    /// <summary>
-    /// Проверка на возможность установки блока
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="byPlayer"></param>
-    /// <param name="blockSelection"></param>
-    /// <param name="byItemStack"></param>
-    /// <returns></returns>
-    public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSelection, ItemStack byItemStack)
-    {
-        if (byItemStack.Block.Variant["status"] == "burned")
-        {
-            return false;
-        }
-        return base.DoPlaceBlock(world, byPlayer, blockSelection, byItemStack);
-    }
-
 
     /// <summary>
     /// Получение информации о предмете в инвентаре
