@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <OutputPath>bin\$(Configuration)\Mods\mod</OutputPath>
+		<OutputPath>$(OutputModPath)</OutputPath>
         <Nullable>enable</Nullable>
         <RootNamespace>ElectricalProgressive</RootNamespace>
     </PropertyGroup>
@@ -12,7 +12,7 @@
             <Private>False</Private>
         </Reference>
       <Reference Include="ElectricalProgressive-Core">
-        <HintPath>C:\Users\tehtelev\source\repos\ElectricalProgressive-Core\Releases\electricalprogressivecore\ElectricalProgressive-Core.dll</HintPath>
+			<HintPath>$(ElectricalProgressivePath)\ElectricalProgressive-Core\Releases\electricalprogressivecore\ElectricalProgressive-Core.dll</HintPath>
         <Private>False</Private>
       </Reference>
       <Reference Include="VintagestoryAPI">
