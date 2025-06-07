@@ -80,6 +80,9 @@ public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
         return base.TryPlaceBlock(world, byPlayer, itemstack, blockSel, ref failureCode);
     }
 
+
+
+
     //ставим блок
     public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel,
         ItemStack byItemStack)

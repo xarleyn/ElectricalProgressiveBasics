@@ -12,7 +12,7 @@ using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.EGenerator;
 
-public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProducer
+public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 {
     protected float PowerOrder;           // Просят столько энергии (сохраняется)
     public const string PowerOrderKey = "electricalprogressive:powerOrder";
@@ -62,7 +62,7 @@ public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProd
     protected bool IsBurned => Block.Variant["type"] == "burned";
 
 
-    protected CompositeShape? CompositeShape;
+    protected CompositeShape? CompositeShape;  //не трогать уровни доступа
 
     public new BlockPos Pos => Position;
 
@@ -119,15 +119,16 @@ public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProd
     };
 
     /// <inheritdoc />
-    protected BEBehaviorEGeneratorBase(BlockEntity blockEntity) : base(blockEntity)
+    public BEBehaviorEGenerator(BlockEntity blockEntity) : base(blockEntity)
     {
         EmaFilter = new(0.05f);
+        this.GetParams();
     }
 
     /// <summary>
     /// Извлекаем параметры из ассетов
     /// </summary>  
-    public virtual void GetParams()
+    public void GetParams()
     {
         Params = MyMiniLib.GetAttributeArrayFloat(Block, "params", def_Params);
 
@@ -142,7 +143,7 @@ public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProd
     }
 
     /// <inheritdoc />
-    public virtual float Produce_give()
+    public float Produce_give()
     {
         float speed = network?.Speed * GearedRatio ?? 0.0F;
 
@@ -155,17 +156,17 @@ public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProd
     }
 
     /// <inheritdoc />
-    public virtual void Produce_order(float amount)
+    public void Produce_order(float amount)
     {
         PowerOrder = amount;
         AvgPowerOrder = (float)EmaFilter.Update(Math.Min(PowerGive, PowerOrder));
     }
 
     /// <inheritdoc />
-    public virtual float getPowerGive() => PowerGive;
+    public float getPowerGive() => PowerGive;
 
     /// <inheritdoc />
-    public virtual float getPowerOrder() => PowerOrder;
+    public float getPowerOrder() => PowerOrder;
 
     /// <summary>
     /// Механическая сеть берет отсюда сопротивление этого генератора
@@ -190,7 +191,7 @@ public abstract class BEBehaviorEGeneratorBase : BEBehaviorMPBase, IElectricProd
 
 
     /// <inheritdoc />
-    public virtual void Update()
+    public void Update()
     {
         //смотрим надо ли обновить модельку когда сгорает прибор
         if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is BlockEntityEGenerator

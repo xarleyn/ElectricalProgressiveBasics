@@ -18,15 +18,13 @@ public class BlockConnector : BlockEBase
         this._coreApi = api;
     }
 
+
+
+
+
+
     public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1)
     {
-        if (this._coreApi is ICoreClientAPI)
-            return;
-
-
-
-
-    public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1) {
             if (this.api is ICoreClientAPI) {
                 return;
             }
@@ -47,7 +45,7 @@ public class BlockConnector : BlockEBase
                     }
                 }
             }
-        }
+        
 
         base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
     }

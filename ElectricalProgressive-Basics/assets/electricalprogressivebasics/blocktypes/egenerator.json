@@ -24,32 +24,14 @@
   ],
 
 
-  "entityBehaviorsByType": {
-    "*-tier1-*": [
-      {
-        "name": "BEBehaviorEGeneratorTier1"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ],
-    "*-tier2-*": [
-      {
-        "name": "BEBehaviorEGeneratorTier2"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ],
-    "*-tier3-*": [
-      {
-        "name": "BEBehaviorEGeneratorTier3"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ]
-  },
+  "entityBehaviors": [
+    {
+      "name": "BEBehaviorEGenerator"
+    },
+    {
+      "name": "ElectricalProgressive"
+    }
+  ],
 
 
 
