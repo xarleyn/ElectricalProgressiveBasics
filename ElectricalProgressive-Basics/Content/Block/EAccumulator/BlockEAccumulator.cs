@@ -50,7 +50,7 @@ public class BlockEAccumulator : Vintagestory.API.Common.Block, IEnergyStorageIt
             return;
 
         // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityEAccumulator)world.BlockAccessor.GetBlockEntity(pos);
+        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEAccumulator;
 
         // если блокэнтити не найден, выходим
         if (blockentity == null)

@@ -80,7 +80,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
             return;
 
         // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityEMotor)world.BlockAccessor.GetBlockEntity(pos);
+        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEMotor;
 
         // если блокэнтити не найден, выходим
         if (blockentity == null)

@@ -78,7 +78,7 @@ public class BlockEGenerator : Vintagestory.API.Common.Block, IMechanicalPowerBl
             return;
 
         // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityEGenerator)world.BlockAccessor.GetBlockEntity(pos);
+        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEGenerator;
 
         // если блокэнтити не найден, выходим
          if (blockentity == null)

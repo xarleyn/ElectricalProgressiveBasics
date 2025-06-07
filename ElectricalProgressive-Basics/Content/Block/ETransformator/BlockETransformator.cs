@@ -69,7 +69,7 @@ public class BlockETransformator : Vintagestory.API.Common.Block
             return;
 
         // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityETransformator)world.BlockAccessor.GetBlockEntity(pos);
+        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityETransformator;
 
         // если блокэнтити не найден, выходим
         if (blockentity == null)

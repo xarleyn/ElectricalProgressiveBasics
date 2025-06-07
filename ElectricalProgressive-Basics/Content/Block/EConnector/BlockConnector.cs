@@ -52,7 +52,7 @@ public class BlockConnector : Vintagestory.API.Common.Block
             return;
 
         // получаем блокэнтити этого блока
-        var blockentity = (BlockEntityEConnector)world.BlockAccessor.GetBlockEntity(pos);
+        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEConnector;
 
         // если блокэнтити не найден, выходим
         if (blockentity == null)
