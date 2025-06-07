@@ -31,6 +31,7 @@ public class BlockETransformator : BlockEBase
         }
     }
 
+
     /// <summary>
     /// Получение информации о предмете в инвентаре
     /// </summary>

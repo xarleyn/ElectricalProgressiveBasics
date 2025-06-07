@@ -23,21 +23,27 @@ public class BlockConnector : BlockEBase
         if (this._coreApi is ICoreClientAPI)
             return;
 
-        if (world.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity)
-        {
-            if (byPlayer is { CurrentBlockSelection: { } blockSelection })
-            {
-                var connection = entity.Connection & ~Facing.AllAll;
 
-                if (connection != Facing.None)
-                {
-                    var stackSize = FacingHelper.Count(Facing.AllAll);
 
-                    if (stackSize > 0)
-                    {
-                        entity.Connection = connection;
-                        entity.MarkDirty(true);
-                        return;
+
+    public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1) {
+            if (this.api is ICoreClientAPI) {
+                return;
+            }
+
+            if (world.BlockAccessor.GetBlockEntity(position) is BlockEntityECable  entity) {
+                if (byPlayer is { CurrentBlockSelection: { } blockSelection }) {
+                    var connection = entity.Connection & ~Facing.AllAll;
+
+                    if (connection != Facing.None) {
+                        var stackSize = FacingHelper.Count(Facing.AllAll);
+
+                        if (stackSize > 0) {
+                            entity.Connection = connection;
+                            entity.MarkDirty(true);
+                            return;
+                        }
+
                     }
                 }
             }

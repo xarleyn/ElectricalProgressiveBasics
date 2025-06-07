@@ -46,6 +46,7 @@ public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
     {
     }
 
+
     public override void OnLoaded(ICoreAPI coreApi)
     {
         base.OnLoaded(coreApi);

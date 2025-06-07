@@ -89,6 +89,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
         }
 
+
         public override bool IsReplacableBy(Vintagestory.API.Common.Block block)
         {
             return base.IsReplacableBy(block) || block is BlockECable || block is BlockESwitch;
@@ -108,10 +109,9 @@ namespace ElectricalProgressive.Content.Block.ECable
             var selection = new Selection(blockSelection);
             var facing = FacingHelper.From(selection.Face, selection.Direction);
 
-            var entity = (BlockEntityECable)world.BlockAccessor.GetBlockEntity(blockSelection.Position);
+            var entity = world.BlockAccessor.GetBlockEntity(blockSelection.Position) as BlockEntityECable; 
 
             // обновляем текущий блок с кабелем 
-            //кавычка тут специально
             if (entity is BlockEntityECable && entity.AllEparams != null) //это кабель?
             {
                 var lines = entity.AllEparams[FacingHelper.Faces(facing).First().Index].lines; //сколько линий на грани уже?
@@ -414,7 +414,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             if (base.DoPlaceBlock(world, byPlayer, blockSelection, byItemStack))
             {
 
-                entity = (BlockEntityECable)world.BlockAccessor.GetBlockEntity(blockSelection.Position);
+                entity = world.BlockAccessor.GetBlockEntity(blockSelection.Position) as BlockEntityECable;
 
                 // обновляем текущий блок с кабелем 
                 //кавычка тут специально

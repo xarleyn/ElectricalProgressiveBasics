@@ -21,6 +21,7 @@ public class BlockEAccumulator : BlockEBase, IEnergyStorageItem
         consume = MyMiniLib.GetAttributeInt(this, "consume", 64);
     }
 
+
     /// <summary>
     /// Зарядка
     /// </summary>
