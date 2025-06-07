@@ -8,7 +8,18 @@ namespace ElectricalProgressive.Content.Block.EGenerator;
 
 public class BlockEntityEGenerator : BlockEntityEBase
 {
-    public Facing Facing = Facing.None;
+    private Facing _facing = Facing.None;
+    public Facing Facing
+    {
+        get => this._facing;
+        set
+        {
+            if (value != this._facing)
+            {
+                this.ElectricalProgressive.Connection = FacingHelper.FullFace(this._facing = value);
+            }
+        }
+    }
     public const string FacingKey = "electricalprogressive:facing";
 
     public override void ToTreeAttributes(ITreeAttribute tree)
