@@ -29,11 +29,6 @@ namespace ElectricalProgressive.Content.Block.ECable
         public float crosssectional;            //площадь сечения из ассета
         public string material = "";              //материал из ассета
 
-
-        private ICoreAPI api;
-
-
-
         public static readonly Dictionary<int, string> voltages = new()
         {
             { 32, "32v" },
@@ -69,8 +64,6 @@ namespace ElectricalProgressive.Content.Block.ECable
         public override void OnLoaded(ICoreAPI api)
         {
             base.OnLoaded(api);
-
-            this.api = api;
 
             // предзагрузка ассетов выключателя
             var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");

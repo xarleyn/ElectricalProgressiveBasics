@@ -8,19 +8,9 @@ namespace ElectricalProgressive.Content.Block.EConnector;
 
 public class BlockConnector : BlockEBase
 {
-    private ICoreAPI _coreApi;
-
-
-    public override void OnLoaded(ICoreAPI api)
-    {
-        base.OnLoaded(api);
-
-        this._coreApi = api;
-    }
-
     public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1)
     {
-        if (this._coreApi is ICoreClientAPI)
+        if (this.api is ICoreClientAPI)
             return;
 
         if (world.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity)
