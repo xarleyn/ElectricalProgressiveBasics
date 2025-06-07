@@ -12,10 +12,10 @@ using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.EMotor;
 
-public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
+public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
 {
 
-    private static CompositeShape? compositeShape;
+    
 
     /// <summary>
     /// Нужно энергии (сохраняется)
@@ -92,6 +92,7 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
         }
     }
 
+    protected CompositeShape? CompositeShape;  //не трогать уровни доступа
     public override int[] AxisSign => OutFacingForNetworkDiscovery.Index switch
     {
         0 => new[]
@@ -136,14 +137,15 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
     public new BlockPos Pos => Position;
 
     /// <inheritdoc />
-    protected BEBehaviorEMotorBase(BlockEntity blockentity) : base(blockentity)
+    public BEBehaviorEMotor(BlockEntity blockentity) : base(blockentity)
     {
+        this.GetParams();
     }
 
     /// <summary>
     /// Извлекаем параметры из ассетов
     /// </summary>
-    public virtual void GetParams()
+    public void GetParams()
     {
         Params = MyMiniLib.GetAttributeArrayFloat(Block, "params", def_Params);
         I_min = Params[0];
@@ -157,19 +159,19 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
 
 
     /// <inheritdoc />
-    public virtual float Consume_request()
+    public float Consume_request()
     {
         return powerRequest;
     }
 
     /// <inheritdoc />
-    public virtual void Consume_receive(float amount)
+    public void Consume_receive(float amount)
     {
         powerReceive = amount;
     }
 
     /// <inheritdoc />
-    public virtual void Update()
+    public void Update()
     {
         //смотрим надо ли обновить модельку когда сгорает прибор
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEMotor { AllEparams: not null } entity)
@@ -195,10 +197,10 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
     }
 
     /// <inheritdoc />
-    public virtual float getPowerReceive() => powerReceive;
+    public float getPowerReceive() => powerReceive;
 
     /// <inheritdoc />
-    public virtual float getPowerRequest() => powerRequest;
+    public float getPowerRequest() => powerRequest;
 
     // не удалять
     public override float GetResistance()
@@ -253,6 +255,8 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
             : -1f * torque;
     }
 
+
+
     /// <summary>
     /// Выдается игре шейп для отрисовки ротора
     /// </summary>
@@ -265,7 +269,7 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
 
         var direction = OutFacingForNetworkDiscovery;
 
-        if (compositeShape == null)
+        if (CompositeShape == null)
         {
             string tier = entity.Block.Variant["tier"];             //какой тир
             string type = "rotor";
@@ -273,10 +277,10 @@ public abstract class BEBehaviorEMotorBase : BEBehaviorMPBase, IElectricConsumer
             string[] variants = new string[2] { tier, type };//нужные вариант генератора
 
             var location = Block.CodeWithVariants(types, variants);
-            compositeShape = api.World.BlockAccessor.GetBlock(location).Shape.Clone();
+            CompositeShape = api.World.BlockAccessor.GetBlock(location).Shape.Clone();
         }
 
-        var shape = compositeShape.Clone();
+        var shape = CompositeShape.Clone();
 
         if (direction == BlockFacing.NORTH)
             shape.rotateY = 0;

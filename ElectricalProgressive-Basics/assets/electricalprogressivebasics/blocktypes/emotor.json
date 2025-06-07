@@ -24,32 +24,14 @@
   ],
 
 
-  "entityBehaviorsByType": {
-    "*-tier1-*": [
-      {
-        "name": "BEBehaviorEMotorTier1"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ],
-    "*-tier2-*": [
-      {
-        "name": "BEBehaviorEMotorTier2"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ],
-    "*-tier3-*": [
-      {
-        "name": "BEBehaviorEMotorTier3"
-      },
-      {
-        "name": "ElectricalProgressive"
-      }
-    ]
-  },
+  "entityBehaviors": [
+    {
+      "name": "BEBehaviorEMotor"
+    },
+    {
+      "name": "ElectricalProgressive"
+    }
+  ],
 
   "attributes": {
     "handbook": {
