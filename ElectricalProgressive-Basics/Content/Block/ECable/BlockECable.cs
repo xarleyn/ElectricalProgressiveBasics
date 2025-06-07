@@ -29,11 +29,6 @@ namespace ElectricalProgressive.Content.Block.ECable
         public float crosssectional;            //площадь сечения из ассета
         public string material = "";              //материал из ассета
 
-
-        private ICoreAPI api;
-
-
-
         public static readonly Dictionary<int, string> voltages = new()
         {
             { 32, "32v" },
@@ -70,8 +65,6 @@ namespace ElectricalProgressive.Content.Block.ECable
         {
             base.OnLoaded(api);
 
-            this.api = api;
-
             // предзагрузка ассетов выключателя
             var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
             var block = api.World.BlockAccessor.GetBlock(assetLocation);
@@ -88,7 +81,6 @@ namespace ElectricalProgressive.Content.Block.ECable
             BlockECable.MeshDataCache.Clear();
 
         }
-
 
         public override bool IsReplacableBy(Vintagestory.API.Common.Block block)
         {
@@ -108,458 +100,290 @@ namespace ElectricalProgressive.Content.Block.ECable
         {
             var selection = new Selection(blockSelection);
             var facing = FacingHelper.From(selection.Face, selection.Direction);
+            var faceIndex = FacingHelper.Faces(facing).First().Index;
+            var currentGameMode = byPlayer.WorldData.CurrentGameMode;
 
-            var entity = world.BlockAccessor.GetBlockEntity(blockSelection.Position) as BlockEntityECable; 
-
-            // обновляем текущий блок с кабелем 
-            if (entity is BlockEntityECable && entity.AllEparams != null) //это кабель?
+            // Если размещаем кабель в блоке без кабелей
+            if (world.BlockAccessor.GetBlockEntity(blockSelection.Position) is not BlockEntityECable entity)
             {
-                var lines = entity.AllEparams[FacingHelper.Faces(facing).First().Index].lines; //сколько линий на грани уже?
+                if (!HasSolidNeighbor(world, blockSelection.Position, faceIndex))
+                    return false;
 
+                // если установка все же успешна
+                if (!base.DoPlaceBlock(world, byPlayer, blockSelection, byItemStack))
+                    return false;
 
-                if ((entity.Connection & facing) != 0)  //мы навелись уже на существующий кабель?
-                {
-
-                    var faceCoonections = entity.Connection & FacingHelper.FromFace(FacingHelper.Faces(facing).First()); //какие соединения уже есть на грани?
-
-                    //какой блок сейчас здесь находится
-                    var indexV = entity.AllEparams[FacingHelper.Faces(facing).First().Index].voltage;          //индекс напряжения этой грани
-                    var material = entity.AllEparams[FacingHelper.Faces(facing).First().Index].material;          //индекс материала этой грани
-                    var burn = entity.AllEparams[FacingHelper.Faces(facing).First().Index].burnout;            //сгорело?
-                    var isol = entity.AllEparams[FacingHelper.Faces(facing).First().Index].isolated;            //изолировано ?
-
-                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1); //берем ассет блока кабеля
-
-                    //проверяем сколько у игрока проводов в руке и совпадают ли они с теми что есть
-                    if (byItemStack != null && byItemStack.Block.Code.ToString().Contains(block.Code)
-                        && !burn
-                        && (byItemStack.StackSize >= FacingHelper.Count(faceCoonections) | byPlayer.WorldData.CurrentGameMode == EnumGameMode.Creative))
-                    {
-                        //для 32V 1-4 линии, для 128V 2 линии
-                        if (lines >= 1.0F && ((entity.AllEparams[FacingHelper.Faces(facing).First().Index].voltage == 32 & lines < 4.0F) | (entity.AllEparams[FacingHelper.Faces(facing).First().Index].voltage == 128 & lines < 2.0F)))                                          //линий 1-3 имеется
-                        {
-                            lines++;                                                                //приращиваем линии
-                            if (byPlayer.WorldData.CurrentGameMode != EnumGameMode.Creative)        //чтобы в креативе не уменьшало стак
-                            {
-                                byItemStack.StackSize -= FacingHelper.Count(faceCoonections) - 1;   //отнимаем у игрока столько же, сколько установили
-                            }
-
-                            entity.AllEparams[FacingHelper.Faces(facing).First().Index].lines = lines; //применяем линии
-                            entity.MarkDirty(true);
-                            return true;
-                        }
-                        else
-                        {
-                            //уведомление на экране
-                            if (this.api is ICoreClientAPI apii)
-                            {
-                                apii.TriggerIngameError((object)this, "cable", "Линий уже достаточно.");
-                            }
-
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        //уведомление на экране
-                        if (this.api is ICoreClientAPI apii)
-                        {
-                            if (!byItemStack!.Block.Code.ToString().Contains(block.Code))
-                            {
-                                apii.TriggerIngameError((object)this, "cable", "Кабеля должны быть того же типа.");
-                            }
-                            else if (byItemStack.StackSize < FacingHelper.Count(faceCoonections))
-                            {
-                                apii.TriggerIngameError((object)this, "cable", "Недостаточно кабелей для размещения.");
-                            }
-                            else if (burn == true)
-                            {
-                                apii.TriggerIngameError((object)this, "cable", "Уберите сгоревший кабель сначала.");
-                            }
-                        }
-
-                        return false;
-                    }
-
-
-                }
-                else
-                {
-                    //проверка на сплошную соседнюю грань
-                    if (lines == 0)
-                    {
-                        var indexFacing = FacingHelper.Faces(facing).First().Index; //индекс грани под курсором
-                        var pos = blockSelection.Position.Copy();
-                        if (indexFacing == 0)
-                        {
-                            pos.Z -= 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 2))
-                                    return false;
-                            }
-                        }
-                        else if (indexFacing == 1)
-                        {
-                            pos.X += 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 3))
-                                    return false;
-                            }
-                        }
-                        else if (indexFacing == 2)
-                        {
-                            pos.Z += 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 0))
-                                    return false;
-                            }
-                        }
-                        else if (indexFacing == 3)
-                        {
-                            pos.X -= 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 1))
-                                    return false;
-                            }
-                        }
-                        else if (indexFacing == 4)
-                        {
-                            pos.Y += 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 5))
-                                    return false;
-                            }
-                        }
-                        else if (indexFacing == 5)
-                        {
-                            pos.Y -= 1;
-
-                            if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                            {
-                                if (!b.SideIsSolid(pos, 1))
-                                    return false;
-                            }
-                        }
-                    }
-
-
-
-
-                    int indexV = voltagesInvert[byItemStack.Block.Variant["voltage"]];    //определяем индекс напряжения                        
-                    bool iso = byItemStack.Block.Code.ToString().Contains("isolated")     //определяем изоляцию
-                        ? true
-                        : false;
-
-                    var isolatedEnvironment = iso; //гидроизоляция
-
-                    //подгружаем некоторые параметры из ассета
-                    string material = MyMiniLib.GetAttributeString(byItemStack.Block, "material", "");  //определяем материал
-                    res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
-                    maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
-                    crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
-
-
-
-                    //линий 0? Значит грань была пустая    
-                    if (lines == 0)
-                    {
-                        entity.Eparams = (
-                            new(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
-                            FacingHelper.Faces(facing).First().Index);
-
-                        entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
-
-                    }
-                    else   //линий не 0, значитуже что-то там есть на грани
-                    {
-
-                        //какой блок сейчас здесь находится
-                        var indexV2 = entity.AllEparams[FacingHelper.Faces(facing).First().Index].voltage;          //индекс напряжения этой грани
-                        var indexM2 = entity.AllEparams[FacingHelper.Faces(facing).First().Index].material;          //индекс материала этой грани
-                        var burn = entity.AllEparams[FacingHelper.Faces(facing).First().Index].burnout;            //сгорело?
-                        var iso2 = entity.AllEparams[FacingHelper.Faces(facing).First().Index].isolated;            //изолировано ?
-
-                        var block = new GetCableAsset().CableAsset(api, entity.Block, indexV2, indexM2, 1, iso2 ? 6 : 1); //берем ассет блока кабеля
-
-
-                        //проверяем сколько у игрока проводов в руке и совпадают ли они с теми что есть
-                        if (byItemStack != null && byItemStack.Block.Code.ToString().Contains(block.Code)
-                            && !burn
-                            && (byItemStack.StackSize >= lines | byPlayer.WorldData.CurrentGameMode == EnumGameMode.Creative))
-                        {
-                            if (byPlayer.WorldData.CurrentGameMode != EnumGameMode.Creative) //чтобы в креативе не уменьшало стак
-                            {
-                                byItemStack.StackSize -= lines - 1;          //отнимаем у игрока столько же, сколько установили
-                            }
-
-                            entity.Eparams = (
-                                new(indexV, maxCurrent, material, res, lines, crosssectional, false, iso, isolatedEnvironment),
-                                FacingHelper.Faces(facing).First().Index);
-
-                            entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
-
-                        }
-                        else
-                        {
-                            //уведомление на экране
-                            if (this.api is ICoreClientAPI apii)
-                            {
-                                if (!byItemStack!.Block.Code.ToString().Contains(block.Code))
-                                {
-                                    apii.TriggerIngameError(this, "cable", "Кабеля должны быть того же типа.");
-                                }
-                                else if (byItemStack.StackSize < lines)
-                                {
-                                    apii.TriggerIngameError(this, "cable", "Недостаточно кабелей для размещения.");
-                                }
-                                else if (burn)
-                                {
-                                    apii.TriggerIngameError(this, "cable", "Уберите сгоревший кабель сначала.");
-                                }
-                            }
-
-                            return false;
-                        }
-                    }
-
-                    entity.Connection |= facing;
-                    entity.MarkDirty(true);
-                }
-                return true;
-            }
-
-
-
-            {
-
-                //а грань под курсором сплошная?
-                var indexFacing = FacingHelper.Faces(facing).First().Index; //индекс грани под курсором
-                var pos = blockSelection.Position.Copy();
-                if (indexFacing == 0)
-                {
-                    pos.Z -= 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 2))
-                            return false;
-                    }
-                }
-                else if (indexFacing == 1)
-                {
-                    pos.X += 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 3))
-                            return false;
-                    }
-                }
-                else if (indexFacing == 2)
-                {
-                    pos.Z += 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 0))
-                            return false;
-                    }
-                }
-                else if (indexFacing == 3)
-                {
-                    pos.X -= 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 1))
-                            return false;
-                    }
-                }
-                else if (indexFacing == 4)
-                {
-                    pos.Y += 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 5))
-                            return false;
-                    }
-                }
-                else if (indexFacing == 5)
-                {
-                    pos.Y -= 1;
-
-                    if (world.BlockAccessor.GetBlock(pos) is Vintagestory.API.Common.Block b)
-                    {
-                        if (!b.SideIsSolid(pos, 4))
-                            return false;
-                    }
-                }
-
-
-            }
-
-
-            // если установка все же успешна
-            if (base.DoPlaceBlock(world, byPlayer, blockSelection, byItemStack))
-            {
-
-                entity = world.BlockAccessor.GetBlockEntity(blockSelection.Position) as BlockEntityECable;
+                // В теории такого не должно произойти
+                if (world.BlockAccessor.GetBlockEntity(blockSelection.Position) is not BlockEntityECable placedCable)
+                    return false;
 
                 // обновляем текущий блок с кабелем 
-                //кавычка тут специально
-                if (entity is BlockEntityECable) //это кабель?
-                {
-                    string material = MyMiniLib.GetAttributeString(byItemStack.Block, "material", "");  //определяем материал
-                    int indexV = voltagesInvert[byItemStack.Block.Variant["voltage"]];    //определяем индекс напряжения
-                    bool iso = byItemStack.Block.Code.ToString().Contains("isolated")     //определяем изоляцию
-                        ? true
-                        : false;
-                    var isolatedEnvironment = iso; //гидроизоляция
+                var material = MyMiniLib.GetAttributeString(byItemStack.Block, "material", "");  // определяем материал
+                var indexV = voltagesInvert[byItemStack.Block.Variant["voltage"]];    // определяем индекс напряжения
+                var isolated = byItemStack.Block.Code.ToString().Contains("isolated");     // определяем изоляцию
+                var isolatedEnvironment = isolated; // гидроизоляция
 
-                    //подгружаем некоторые параметры из ассета
-                    res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
-                    maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
-                    crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
+                //подгружаем некоторые параметры из ассета
+                res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
+                maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
+                crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
 
-                    entity.Connection = facing;       //сообщаем направление
-                    entity.Eparams = (
-                        new(indexV, maxCurrent, material, res, 1, crosssectional, false, iso, isolatedEnvironment),
-                        FacingHelper.Faces(facing).First().Index);
+                var newEparams = new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, isolated, isolatedEnvironment);
 
-                    entity.AllEparams[FacingHelper.Faces(facing).First().Index] = entity.Eparams.Item1;
-                    //markdirty тут строго не нужен!
+                placedCable.Connection = facing;       //сообщаем направление
+                placedCable.Eparams = (newEparams, faceIndex);
 
-                }
+                placedCable.AllEparams[faceIndex] = newEparams;
+                //markdirty тут строго не нужен!
 
                 return true;
             }
 
+            // обновляем текущий блок с кабелем 
+            var lines = entity.AllEparams[faceIndex].lines; //сколько линий на грани уже?
 
-            return false;
+            if ((entity.Connection & facing) != 0)  //мы навелись уже на существующий кабель?
+            {
+                //какие соединения уже есть на грани?
+                var entityConnection = entity.Connection & FacingHelper.FromFace(FacingHelper.Faces(facing).First());
+
+                //какой блок сейчас здесь находится
+                var indexV = entity.AllEparams[faceIndex].voltage;          //индекс напряжения этой грани
+                var material = entity.AllEparams[faceIndex].material;          //индекс материала этой грани
+                var burnout = entity.AllEparams[faceIndex].burnout;            //сгорело?
+                var isolated = entity.AllEparams[faceIndex].isolated;            //изолировано ?
+
+                // берем ассет блока кабеля
+                var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isolated ? 6 : 1);
+
+                //проверяем сколько у игрока проводов в руке и совпадают ли они с теми что есть
+                if (!CanAddCableToFace(burnout, block.Code, currentGameMode, byItemStack, FacingHelper.Count(entityConnection)))
+                    return false;
+
+                // для 32V 1-4 линии, для 128V 2 линии
+                if ((indexV == 32 && lines == 4) || (indexV == 128 && lines == 2))
+                {
+                    if (this.api is ICoreClientAPI apii)
+                        apii.TriggerIngameError((object)this, "cable", "Линий уже достаточно.");
+
+                    return false;
+                }
+
+                lines++; //приращиваем линии
+                if (currentGameMode != EnumGameMode.Creative) // чтобы в креативе не уменьшало стак
+                {
+                    // отнимаем у игрока столько же, сколько установили
+                    byItemStack.StackSize -= FacingHelper.Count(entityConnection) - 1;
+                }
+
+                entity.AllEparams[faceIndex].lines = lines; // применяем линии
+                entity.MarkDirty(true);
+                return true;
+            }
+            else
+            {
+                //проверка на сплошную соседнюю грань
+                if (lines == 0 && !HasSolidNeighbor(world, blockSelection.Position, faceIndex))
+                    return false;
+
+                var indexV = voltagesInvert[byItemStack.Block.Variant["voltage"]];    //определяем индекс напряжения
+                var isolated = byItemStack.Block.Code.ToString().Contains("isolated");     //определяем изоляцию
+                var isolatedEnvironment = isolated; //гидроизоляция
+
+                //подгружаем некоторые параметры из ассета
+                var material = MyMiniLib.GetAttributeString(byItemStack.Block, "material", "");  //определяем материал
+                res = MyMiniLib.GetAttributeFloat(byItemStack.Block, "res", 1);
+                maxCurrent = MyMiniLib.GetAttributeFloat(byItemStack.Block, "maxCurrent", 1);
+                crosssectional = MyMiniLib.GetAttributeFloat(byItemStack.Block, "crosssectional", 1);
+
+                //линий 0? Значит грань была пустая
+                if (lines == 0)
+                {
+                    var newEparams = new EParams(indexV, maxCurrent, material, res, 1, crosssectional, false, isolated, isolatedEnvironment);
+                    entity.Eparams = (newEparams, faceIndex);
+
+                    entity.AllEparams[faceIndex] = newEparams;
+                }
+                else   //линий не 0, значит уже что-то там есть на грани
+                {
+                    //какой блок сейчас здесь находится
+                    var indexV2 = entity.AllEparams[faceIndex].voltage;          //индекс напряжения этой грани
+                    var indexM2 = entity.AllEparams[faceIndex].material;          //индекс материала этой грани
+                    var burnout = entity.AllEparams[faceIndex].burnout;            //сгорело?
+                    var iso2 = entity.AllEparams[faceIndex].isolated;            //изолировано ?
+
+                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV2, indexM2, 1, iso2 ? 6 : 1); // берем ассет блока кабеля
+
+                    //проверяем сколько у игрока проводов в руке и совпадают ли они с теми что есть
+                    if (!CanAddCableToFace(burnout, block.Code, currentGameMode, byItemStack, lines))
+                        return false;
+
+                    if (currentGameMode != EnumGameMode.Creative) // чтобы в креативе не уменьшало стак
+                        byItemStack.StackSize -= lines - 1;          // отнимаем у игрока столько же, сколько установили
+
+                    var newEparams = new EParams(indexV, maxCurrent, material, res, lines, crosssectional, false, isolated, isolatedEnvironment);
+                    entity.Eparams = (newEparams, faceIndex);
+
+                    entity.AllEparams[faceIndex] = newEparams;
+                }
+
+                entity.Connection |= facing;
+                entity.MarkDirty(true);
+            }
+
+            return true;
         }
 
+        private bool HasSolidNeighbor(IWorldAccessor world, BlockPos pos, int faceIndex)
+        {
+            var neighborPos = pos.Copy();
+            int checkFace;
 
+            switch (faceIndex)
+            {
+                case 0: neighborPos.Z--; checkFace = 2; break;
+                case 1: neighborPos.X++; checkFace = 3; break;
+                case 2: neighborPos.Z++; checkFace = 0; break;
+                case 3: neighborPos.X--; checkFace = 1; break;
+                case 4: neighborPos.Y++; checkFace = 5; break;
+                case 5: neighborPos.Y--; checkFace = 4; break;
+                default: return false;
+            }
+
+            var neighborBlock = world.BlockAccessor.GetBlock(neighborPos);
+            return neighborBlock != null && neighborBlock.SideIsSolid(neighborPos, checkFace);
+        }
+
+        private bool CanAddCableToFace(bool burnout, AssetLocation requiredCable, EnumGameMode gameMode, ItemStack itemStack, int requiredCount)
+        {
+            if (api is not ICoreClientAPI clientApi)
+                return true;
+
+            if (burnout)
+            {
+                clientApi.TriggerIngameError(this, "cable", "Уберите сгоревший кабель сначала.");
+                return false;
+            }
+
+            if (!itemStack.Block.Code.ToString().Contains(requiredCable))
+            {
+                clientApi.TriggerIngameError(this, "cable", "Кабеля должны быть того же типа.");
+                return false;
+            }
+
+            if (gameMode != EnumGameMode.Creative && itemStack.StackSize < requiredCount)
+            {
+                clientApi.TriggerIngameError(this, "cable", "Недостаточно кабелей для размещения.");
+                return false;
+            }
+
+            return true;
+        }
 
         public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1)
         {
             if (this.api is ICoreClientAPI)
+                return;
+
+            if (world.BlockAccessor.GetBlockEntity(position) is not BlockEntityECable entity)
             {
+                base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
                 return;
             }
 
-
-            if (world.BlockAccessor.GetBlockEntity(position) is BlockEntityECable entity)
+            if (byPlayer is not { CurrentBlockSelection: { } blockSelection })
             {
-                if (byPlayer is { CurrentBlockSelection: { } blockSelection })
+                base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
+                return;
+            }
+
+            var key = CacheDataKey.FromEntity(entity);
+            var hitPosition = blockSelection.HitPosition;
+
+            var sf = new SelectionFacingCable();
+            var selectedFacing = sf.SelectionFacing(key, hitPosition, entity); // выделяем направление для слома под курсором
+
+            //определяем какой выключатель ломать
+            var faceSelect = Facing.None;
+            var selectedSwitches = Facing.None;
+
+            if (selectedFacing != Facing.None)
+            {
+                faceSelect = FacingHelper.FromFace(FacingHelper.Faces(selectedFacing).First());
+                selectedSwitches = entity.Switches & faceSelect;
+            }
+
+            // тут ломаем переключатель
+            if (selectedSwitches != Facing.None)
+            {
+                var switchesStackSize = FacingHelper.Faces(selectedSwitches).Count();
+                if (switchesStackSize > 0)
                 {
-                    var key = CacheDataKey.FromEntity(entity);
-                    var hitPosition = blockSelection.HitPosition;
+                    entity.Switches &= ~faceSelect;
+                    entity.MarkDirty(true);
 
-                    var sf = new SelectionFacingCable();
-                    var selectedFacing = sf.SelectionFacing(key, hitPosition, entity);  //выделяем направление для слома под курсором
+                    var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
+                    var block = world.BlockAccessor.GetBlock(assetLocation);
+                    var itemStack = new ItemStack(block, switchesStackSize);
+                    world.SpawnItemEntity(itemStack, position.ToVec3d());
 
-
-                    //определяем какой выключатель ломать
-                    Facing faceSelect = Facing.None;
-                    Facing selectedSwitches;
-                    if (selectedFacing != Facing.None)
-                    {
-                        faceSelect = FacingHelper.FromFace(FacingHelper.Faces(selectedFacing).First());
-                        selectedSwitches = entity.Switches & faceSelect;
-                    }
-                    else
-                    {
-                        selectedSwitches = Facing.None;
-                    }
-
-
-                    //тут ломаем переключатель
-                    if (selectedSwitches != Facing.None)
-                    {
-                        var stackSize = FacingHelper.Faces(selectedSwitches).Count();
-
-                        if (stackSize > 0)
-                        {
-                            entity.Switches &= ~faceSelect;
-                            entity.MarkDirty(true);
-
-
-                            var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
-                            var block = world.BlockAccessor.GetBlock(assetLocation);
-                            var itemStack = new ItemStack(block, stackSize);
-                            world.SpawnItemEntity(itemStack, position.ToVec3d());
-
-
-                            return;
-                        }
-                    }
-
-                    //здесь уже ломаем кабеля
-                    var connection = entity.Connection & ~selectedFacing;      //отнимает выбранные соединения
-
-                    if (connection != Facing.None)
-                    {
-                        var stackSize = FacingHelper.Count(selectedFacing);    //соединений выделено
-
-                        if (stackSize > 0)
-                        {
-                            entity.Connection = connection;
-                            entity.MarkDirty(true);
-
-
-                            foreach (var face in FacingHelper.Faces(selectedFacing))         //перебираем все грани выделенных кабелей
-                            {
-                                var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
-                                var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
-                                var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
-                                var isol = entity.AllEparams[face.Index].isolated;          //изолировано ли?
-                                var burn = entity.AllEparams[face.Index].burnout;          //сгорело ли?
-
-
-                                connection = selectedFacing & FacingHelper.FromFace(face);                   //берем направления только в этой грани
-
-                                if ((entity.Connection & FacingHelper.FromFace(face)) == 0) //если грань осталась пустая
-                                    entity.AllEparams[face.Index] = new();
-
-                                stackSize = FacingHelper.Count(connection) * indexQ;          //сколько на этой грани проводов выронить
-
-                                ItemStack itemStack = null!;
-                                if (burn)       //если сгорело, то бросаем кусочки металла
-                                {
-                                    AssetLocation assetLoc = new("metalbit-" + material);
-                                    var item = api.World.GetItem(assetLoc);
-                                    itemStack = new(item, stackSize);
-                                }
-                                else
-                                {
-                                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1); //берем ассет блока кабеля
-                                    itemStack = new(block, stackSize);
-                                }
-
-                                world.SpawnItemEntity(itemStack, position.ToVec3d());
-
-
-                            }
-
-                            return;
-                        }
-                    }
-
+                    return;
                 }
             }
 
-            base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
+            // здесь уже ломаем кабеля
+            var connection = entity.Connection & ~selectedFacing; // отнимает выбранные соединения
+            if (connection == Facing.None)
+            {
+                base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
+                return;
+            }
+
+            var stackSize = FacingHelper.Count(selectedFacing); // соединений выделено
+            if (stackSize <= 0)
+            {
+                base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
+                return;
+            }
+
+            entity.Connection = connection;
+            entity.MarkDirty(true);
+
+            //перебираем все грани выделенных кабелей
+            foreach (var face in FacingHelper.Faces(selectedFacing))
+            {
+                var indexV = entity.AllEparams[face.Index].voltage; //индекс напряжения этой грани
+                var material = entity.AllEparams[face.Index].material; //индекс материала этой грани
+                var indexQ = entity.AllEparams[face.Index].lines; //индекс линий этой грани
+                var isol = entity.AllEparams[face.Index].isolated; //изолировано ли?
+                var burn = entity.AllEparams[face.Index].burnout; //сгорело ли?
+
+                // берем направления только в этой грани
+                connection = selectedFacing & FacingHelper.FromFace(face);
+
+                //если грань осталась пустая
+                if ((entity.Connection & FacingHelper.FromFace(face)) == 0)
+                    entity.AllEparams[face.Index] = new();
+
+                //сколько на этой грани проводов выронить
+                stackSize = FacingHelper.Count(connection) * indexQ;
+
+                ItemStack itemStack = null!;
+                if (burn) //если сгорело, то бросаем кусочки металла
+                {
+                    var assetLoc = new AssetLocation("metalbit-" + material);
+                    var item = api.World.GetItem(assetLoc);
+                    itemStack = new(item, stackSize);
+                }
+                else
+                {
+                    // берем ассет блока кабеля
+                    var block = new GetCableAsset().CableAsset(api, entity.Block, indexV, material, 1, isol ? 6 : 1);
+                    itemStack = new(block, stackSize);
+                }
+
+                world.SpawnItemEntity(itemStack, position.ToVec3d());
+            }
         }
 
 
