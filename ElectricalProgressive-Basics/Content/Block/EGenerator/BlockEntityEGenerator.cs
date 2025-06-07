@@ -1,69 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using ElectricalProgressive.Interface;
-using ElectricalProgressive.Utils;
-using Vintagestory.API.Client;
+﻿using ElectricalProgressive.Utils;
+using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
 namespace ElectricalProgressive.Content.Block.EGenerator;
 
-public class BlockEntityEGenerator : BlockEntity
+public class BlockEntityEGenerator : BlockEntityEBase
 {
-    private Facing facing = Facing.None;
-
-
-    private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
-
+    private Facing _facing = Facing.None;
     public Facing Facing
     {
-        get => this.facing;
+        get => this._facing;
         set
         {
-            if (value != this.facing)
+            if (value != this._facing)
             {
-                this.ElectricalProgressive.Connection =
-                    FacingHelper.FullFace(this.facing = value);
+                this.ElectricalProgressive.Connection = FacingHelper.FullFace(this._facing = value);
             }
         }
     }
-
-    //передает значения из Block в BEBehaviorElectricalProgressive
-    public (EParams, int) Eparams
-    {
-        get => this.ElectricalProgressive?.Eparams ?? (new EParams(), 0);
-        set => this.ElectricalProgressive!.Eparams = value;
-    }
-
-    //передает значения из Block в BEBehaviorElectricalProgressive
-    public EParams[] AllEparams
-    {
-        get => this.ElectricalProgressive?.AllEparams ?? new EParams[]
-                    {
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams()
-                    };
-        set
-        {
-            if (this.ElectricalProgressive != null)
-            {
-                this.ElectricalProgressive.AllEparams = value;
-            }
-        }
-    }
-
-
+    public const string FacingKey = "electricalprogressive:facing";
 
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
 
-        tree.SetBytes("electricalprogressive:facing", SerializerUtil.Serialize(this.facing));
+        tree.SetBytes(FacingKey, SerializerUtil.Serialize(Facing));
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -72,11 +35,11 @@ public class BlockEntityEGenerator : BlockEntity
 
         try
         {
-            this.facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:facing"));
+            Facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes(FacingKey));
         }
         catch (Exception exception)
         {
-            this.Api?.Logger.Error(exception.ToString());
+            Api?.Logger.Error(exception.ToString());
         }
     }
 }

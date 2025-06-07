@@ -1,9 +1,8 @@
-﻿using System;
+﻿using ElectricalProgressive.Interface;
+using ElectricalProgressive.Utils;
+using System;
 using System.Linq;
 using System.Text;
-using ElectricalProgressive.Content.Block.ETransformator;
-using ElectricalProgressive.Interface;
-using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
@@ -14,96 +13,115 @@ namespace ElectricalProgressive.Content.Block.EAccumulator;
 
 public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
 {
-
     public BEBehaviorEAccumulator(BlockEntity blockEntity) : base(blockEntity)
     {
     }
- 
-    public bool isBurned => this.Block.Variant["status"] == "burned";
 
-    public float lastCapacity=0;  //предыдущее значение емкости
+    public bool IsBurned => this.Block.Variant["status"] == "burned";
 
-    public float capacity;  //текущая емкость (сохраняется)
+    /// <summary>
+    /// предыдущее значение емкости
+    /// </summary>
+    public float LastCapacity { get; set; }
 
-    public float maxCapacity => MyMiniLib.GetAttributeInt(this.Block, "maxcapacity", 16000);
+    /// <summary>
+    /// текущая емкость (сохраняется)
+    /// </summary>
+    public float Capacity { get; set; }
 
-    float multFromDurab= 1.0F;
+    public const string CapacityKey = "electricalprogressive:capacity";
+
+    public float MaxCapacity => MyMiniLib.GetAttributeInt(this.Block, "maxcapacity", 16000);
+
+    float multFromDurab = 1.0F;
 
     public new BlockPos Pos => this.Blockentity.Pos;
 
-    public float power => MyMiniLib.GetAttributeFloat(this.Block, "power", 128.0F);   //мощность батареи!!!!!!!
+    /// <summary>
+    /// мощность батареи!!!!!!!
+    /// </summary>
+    public float power => MyMiniLib.GetAttributeFloat(this.Block, "power", 128.0F);
 
     public float GetMaxCapacity()
     {
-        return maxCapacity* multFromDurab;
+        return MaxCapacity * multFromDurab;
     }
 
     public float GetCapacity()
     {
-        return capacity;
+        return Capacity;
     }
 
     /// <summary>
     /// Задает сразу емкость аккумулятору (вызывать только при установке аккумулятора)
     /// </summary>
     /// <returns></returns>
-    public void SetCapacity(float value, float multDurab=1.0F)
+    public void SetCapacity(float value, float multDurab = 1.0F)
     {
-        multFromDurab = multDurab;  
+        multFromDurab = multDurab;
 
-        capacity = (value > GetMaxCapacity())
+        Capacity = value > GetMaxCapacity()
             ? GetMaxCapacity()
             : value;
     }
 
-
     public void Store(float amount)
     {
-        var buf = Math.Min(Math.Min(amount, power), GetMaxCapacity() - capacity);
+        var buf = Math.Min(Math.Min(amount, power), GetMaxCapacity() - Capacity);
 
-        capacity += buf;  //не позволяем одним пакетом сохранить больше максимального тока. В теории такого превышения и не должно случиться
-
+        // не позволяем одним пакетом сохранить больше максимального тока.
+        // В теории такого превышения и не должно случиться
+        Capacity += buf;
     }
 
     public float Release(float amount)
-    {        
-        var buf = Math.Min(capacity, Math.Min(amount, power));
-        capacity -= buf;
+    {
+        var buf = Math.Min(Capacity, Math.Min(amount, power));
+        Capacity -= buf;
 
-        return buf;                                                 //выдаем пакет c учетом тока и запасов
+        // выдаем пакет c учетом тока и запасов
+        return buf;
     }
-
 
     public float canStore()
     {
-        return Math.Min(power, GetMaxCapacity() - capacity);
+        return Math.Min(power, GetMaxCapacity() - Capacity);
     }
 
     public float canRelease()
     {
-        return Math.Min(capacity, power);
+        return Math.Min(Capacity, power);
     }
 
     public float GetLastCapacity()
     {
-        return this.lastCapacity;
+        return this.LastCapacity;
     }
 
     public void Update()
     {
 
-        //смотрим надо ли обновить модельку когда сгорает батарея
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator entity && entity.AllEparams != null)
+        // смотрим надо ли обновить модельку когда сгорает батарея
+        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator
+            {
+                AllEparams: not null
+            } entity)
         {
             bool hasBurnout = entity.AllEparams.Any(e => e.burnout);
 
             if (hasBurnout)
             {
-                if (entity.Block.Variant["tier"] == "tier1")
-                    ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
-                else if (entity.Block.Variant["tier"] == "tier2")
-                    ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 1.9, 0.5));
+                switch (entity.Block.Variant["tier"])
+                {
+                    case "tier1":
+                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+                        break;
+                    case "tier2":
+                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 1.9, 0.5));
+                        break;
+                }
             }
+
             if (hasBurnout && entity.Block.Variant["status"] != "burned")
             {
                 this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("status", "burned")).BlockId, Pos);
@@ -111,7 +129,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
         }
 
 
-        lastCapacity = capacity;
+        LastCapacity = Capacity;
         this.Blockentity.MarkDirty(true);
     }
 
@@ -119,37 +137,34 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
-        tree.SetFloat("electricalprogressive:capacity", capacity);
+        tree.SetFloat(CapacityKey, Capacity);
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
-        capacity = tree.GetFloat("electricalprogressive:capacity");
+        Capacity = tree.GetFloat(CapacityKey);
     }
-
 
     public override void GetBlockInfo(IPlayer forPlayer, StringBuilder stringBuilder)
     {
         base.GetBlockInfo(forPlayer, stringBuilder);
 
         //проверяем не сгорел ли прибор
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator entity )
-        {   
-            if (isBurned)
+        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator entity)
+        {
+            if (IsBurned)
             {
                 stringBuilder.AppendLine(Lang.Get("Burned"));
             }
             else
             {
                 stringBuilder.AppendLine(StringHelper.Progressbar(GetCapacity() * 100.0f / GetMaxCapacity()));
-                stringBuilder.AppendLine("└ " + Lang.Get("Storage") + ": " + GetCapacity() + "/" + GetMaxCapacity() + " "+ Lang.Get("J"));
+                stringBuilder.AppendLine("└ " + Lang.Get("Storage") + ": " + GetCapacity() + "/" + GetMaxCapacity() + " " + Lang.Get("J"));
             }
 
         }
- 
+
         stringBuilder.AppendLine();
     }
-
-
 }

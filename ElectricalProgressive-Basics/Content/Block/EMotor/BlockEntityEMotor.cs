@@ -1,67 +1,32 @@
-﻿using System;
-using ElectricalProgressive.Interface;
-using ElectricalProgressive.Utils;
+﻿using ElectricalProgressive.Utils;
+using System;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
 
 namespace ElectricalProgressive.Content.Block.EMotor;
 
-public class BlockEntityEMotor : BlockEntity
+public class BlockEntityEMotor : BlockEntityEBase
 {
-    private Facing facing = Facing.None;
-
-    private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
-
+    private Facing _facing = Facing.None;
     public Facing Facing
     {
-        get => this.facing;
+        get => this._facing;
         set
         {
-            if (value != this.facing)
+            if (value != this._facing)
             {
-                this.ElectricalProgressive.Connection =
-                    FacingHelper.FullFace(this.facing = value);
+                this.ElectricalProgressive.Connection = FacingHelper.FullFace(this._facing = value);
             }
         }
     }
-
-
-    //передает значения из Block в BEBehaviorElectricalProgressive
-    public (EParams, int) Eparams
-    {
-        get => this.ElectricalProgressive?.Eparams ?? (new EParams(), 0);
-        set => this.ElectricalProgressive!.Eparams = value;
-    }
-
-    //передает значения из Block в BEBehaviorElectricalProgressive
-    public EParams[] AllEparams
-    {
-        get => this.ElectricalProgressive?.AllEparams ?? new EParams[]
-                    {
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams(),
-                        new EParams()
-                    };
-        set
-        {
-            if (this.ElectricalProgressive != null)
-            {
-                this.ElectricalProgressive.AllEparams = value;
-            }
-        }
-    }
-
-
+    public const string FacingKey = "electricalprogressive:facing";
 
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
 
-        tree.SetBytes("electricalprogressive:facing", SerializerUtil.Serialize(this.facing));
+        tree.SetBytes(FacingKey, SerializerUtil.Serialize(this.Facing));
     }
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
@@ -70,7 +35,7 @@ public class BlockEntityEMotor : BlockEntity
 
         try
         {
-            this.facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes("electricalprogressive:facing"));
+            this.Facing = SerializerUtil.Deserialize<Facing>(tree.GetBytes(FacingKey));
         }
         catch (Exception exception)
         {

@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using ElectricalProgressive.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ElectricalProgressive.Content.Block.EConnector;
-using ElectricalProgressive.Utils;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
-using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.EMotor;
-public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
+public class BlockEMotor : BlockEBase, IMechanicalPowerBlock
 {
     private readonly static Dictionary<(Facing, string), MeshData> MeshData = new();
     private static float[] def_Params = { 10.0F, 100.0F, 0.5F, 0.75F, 0.5F, 0.1F, 0.05F };   //заглушка
@@ -53,51 +50,11 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
     }
 
 
-    /// <summary>
-    /// Кто-то или что-то коснулось блока и теперь получит урон
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="entity"></param>
-    /// <param name="pos"></param>
-    /// <param name="facing"></param>
-    /// <param name="collideSpeed"></param>
-    /// <param name="isImpact"></param>
-    public override void OnEntityCollide(
-        IWorldAccessor world,
-        Entity entity,
-        BlockPos pos,
-        BlockFacing facing,
-        Vec3d collideSpeed,
-        bool isImpact
-    )
-    {
-        // если это клиент, то не надо 
-        if (world.Side == EnumAppSide.Client)
-            return;
-
-        // энтити не живой и не создание? выходим
-        if (!entity.Alive || !entity.IsCreature)
-            return;
-
-        // получаем блокэнтити этого блока
-        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEMotor;
-
-        // если блокэнтити не найден, выходим
-        if (blockentity == null)
-            return;
-
-        // передаем работу в наш обработчик урона
-        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
-
-    }
-
     public override void OnLoaded(ICoreAPI coreApi)
     {
         base.OnLoaded(coreApi);
 
     }
-
-    
 
     public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack,
         BlockSelection blockSel, ref string failureCode)
@@ -106,7 +63,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
 
         Facing facing = Facing.None;
 
-        
+
 
         try
         {
@@ -167,7 +124,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
             var isolatedEnvironment = MyMiniLib.GetAttributeBool(this, "isolatedEnvironment", false);
 
             entity.Eparams = (
-                new EParams(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
+                new(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
                 FacingHelper.Faces(facing).First().Index);
 
 
@@ -382,7 +339,7 @@ public class BlockEMotor : Vintagestory.API.Common.Block, IMechanicalPowerBlock
         dsc.AppendLine(Lang.Get("max_speed") + ": " + Params[4] + " " + Lang.Get("rps"));
         dsc.AppendLine(Lang.Get("res_speed") + ": " + Params[5]);
         dsc.AppendLine(Lang.Get("max_torque") + ": " + Params[2]);
-        dsc.AppendLine(Lang.Get("kpd") + ": " + Params[3]*100 + " %");
+        dsc.AppendLine(Lang.Get("kpd") + ": " + Params[3] * 100 + " %");
         dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false)) ? Lang.Get("Yes") : Lang.Get("No")));
     }
 }

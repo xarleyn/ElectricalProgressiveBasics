@@ -1,12 +1,9 @@
-﻿using System;
+﻿using ElectricalProgressive.Interface;
+using ElectricalProgressive.Utils;
 using System.Linq;
 using System.Text;
-using ElectricalProgressive.Content.Block.ECable;
-using ElectricalProgressive.Interface;
-using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
-using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 
 
@@ -16,6 +13,7 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
 {
     float maxCurrent; //максимальный ток
     float power;      //мощность
+
     public BEBehaviorETransformator(BlockEntity blockEntity) : base(blockEntity)
     {
         maxCurrent = MyMiniLib.GetAttributeFloat(this.Block, "maxCurrent", 5.0F);
@@ -57,14 +55,17 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
     public void Update()
     {
         //смотрим надо ли обновить модельку когда сгорает трансформатор
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityETransformator entity && entity.AllEparams != null)
+        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityETransformator
+            {
+                AllEparams: not null
+            } entity)
         {
             bool hasBurnout = entity.AllEparams.Any(e => e.burnout);
             if (hasBurnout)
             {
                 ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
             }
-            if (hasBurnout && entity.Block.Variant["status"]!="burned")
+            if (hasBurnout && entity.Block.Variant["status"] != "burned")
             {
                 this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("status", "burned")).BlockId, Pos);
             }

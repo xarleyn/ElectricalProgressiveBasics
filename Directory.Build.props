@@ -1,0 +1,7 @@
+<Project>
+	<PropertyGroup>
+		<!-- Пока пути будут хардкодом -->
+		<ElectricalProgressivePath>C:\Users\tehtelev\source\repos</ElectricalProgressivePath>
+		<OutputModPath>bin\$(Configuration)\Mods\mod</OutputModPath>
+	</PropertyGroup>
+</Project>

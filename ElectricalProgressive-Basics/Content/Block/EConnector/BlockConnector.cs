@@ -1,67 +1,29 @@
-﻿using ElectricalProgressive.Content.Block;
-using ElectricalProgressive.Content.Block.ECable;
+﻿using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
 namespace ElectricalProgressive.Content.Block.EConnector;
 
-public class BlockConnector : Vintagestory.API.Common.Block
+public class BlockConnector : BlockEBase
 {
-
-    private ICoreAPI api;
+    private ICoreAPI _coreApi;
 
 
     public override void OnLoaded(ICoreAPI api)
     {
         base.OnLoaded(api);
 
-        this.api = api;
-
+        this._coreApi = api;
     }
 
-
-
-
-    /// <summary>
-    /// Кто-то или что-то коснулось блока и теперь получит урон
-    /// </summary>
-    /// <param name="world"></param>
-    /// <param name="entity"></param>
-    /// <param name="pos"></param>
-    /// <param name="facing"></param>
-    /// <param name="collideSpeed"></param>
-    /// <param name="isImpact"></param>
-    public override void OnEntityCollide(
-        IWorldAccessor world,
-        Entity entity,
-        BlockPos pos,
-        BlockFacing facing,
-        Vec3d collideSpeed,
-        bool isImpact
-    )
+    public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1)
     {
-        // если это клиент, то не надо 
-        if (world.Side == EnumAppSide.Client)
+        if (this._coreApi is ICoreClientAPI)
             return;
 
-        // энтити не живой и не создание? выходим
-        if (!entity.Alive || !entity.IsCreature)
-            return;
 
-        // получаем блокэнтити этого блока
-        var blockentity = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityEConnector;
-
-        // если блокэнтити не найден, выходим
-        if (blockentity == null)
-            return;
-
-        // передаем работу в наш обработчик урона
-        ElectricalProgressive.damageManager.DamageEntity(world, entity, pos, facing, blockentity.AllEparams, this);
-
-    }
 
 
     public override void OnBlockBroken(IWorldAccessor world, BlockPos position, IPlayer byPlayer, float dropQuantityMultiplier = 1) {
@@ -81,28 +43,26 @@ public class BlockConnector : Vintagestory.API.Common.Block
                             entity.MarkDirty(true);
                             return;
                         }
+
                     }
                 }
             }
-
-            base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
         }
-        
-        public override void OnNeighbourBlockChange(IWorldAccessor world, BlockPos pos, BlockPos neibpos) {
-            base.OnNeighbourBlockChange(world, pos, neibpos);
 
-            if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityECable entity) {
-                var blockFacing = BlockFacing.FromVector(neibpos.X - pos.X, neibpos.Y - pos.Y, neibpos.Z - pos.Z);
-                var selectedFacing = FacingHelper.FromFace(blockFacing);
+        base.OnBlockBroken(world, position, byPlayer, dropQuantityMultiplier);
+    }
 
-                if ((entity.Connection & ~ selectedFacing) == Facing.None) {
-                    world.BlockAccessor.BreakBlock(pos, null);
+    public override void OnNeighbourBlockChange(IWorldAccessor world, BlockPos pos, BlockPos neibpos)
+    {
+        base.OnNeighbourBlockChange(world, pos, neibpos);
 
-                    return;
-                }
+        if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityECable entity)
+        {
+            var blockFacing = BlockFacing.FromVector(neibpos.X - pos.X, neibpos.Y - pos.Y, neibpos.Z - pos.Z);
+            var selectedFacing = FacingHelper.FromFace(blockFacing);
 
-
-
-            }
+            if ((entity.Connection & ~selectedFacing) == Facing.None)
+                world.BlockAccessor.BreakBlock(pos, null);
         }
     }
+}
