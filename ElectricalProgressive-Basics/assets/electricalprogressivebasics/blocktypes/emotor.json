@@ -46,7 +46,7 @@
   },
 
 
-  "attributesByType": { //параметры двигателя, менять на свой страх и риск   I_min , I_max, torque_max, kpd_max, speed_max, resistance_factor, base_resistance 
+  "attributesByType": { //params - параметры двигателя: I_min , I_max, torque_max, kpd_max, speed_max, resistance_factor, base_resistance 
     "*-tier1-*": {
       "params": [ 10.0, 128.0, 0.5, 0.75, 0.5, 0.125, 0.05 ],
       "voltage": 32,
