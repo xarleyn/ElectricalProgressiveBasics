@@ -240,7 +240,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         stringBuilder.AppendLine("├ " + Lang.Get("Blocks") + ": " + networkInformation?.NumberOfBlocks);
         stringBuilder.AppendLine("├ " + Lang.Get("Generation") + ": " + networkInformation?.Production + " " + Lang.Get("W"));
         stringBuilder.AppendLine("├ " + Lang.Get("Consumption") + ": " + networkInformation?.Consumption + " " + Lang.Get("W"));
-        stringBuilder.AppendLine("└ " + Lang.Get("Shortage") + ": " + networkInformation?.Lack + " " + Lang.Get("W"));
+        stringBuilder.AppendLine("└ " + Lang.Get("Request") + ": " + networkInformation?.Request + " " + Lang.Get("W"));
 
         stringBuilder.AppendLine(Lang.Get("Block"));
         stringBuilder.AppendLine("├ " + Lang.Get("Max. current") + ": " + networkInformation?.eParamsInNetwork.maxCurrent * networkInformation?.eParamsInNetwork.lines + " " + Lang.Get("A"));

@@ -161,8 +161,8 @@
   "game:Generation": "Generation",
   "game:W": "W",
   "game:Consumption": "Consumption",
-  "game:Production": "Production",
-  "game:Shortage": "Shortage",
+  "game:Production": "Produced",
+  "game:Request": "Required",
 
   "game:Press": "Hold",
   "game:for details": "for details",

@@ -169,8 +169,8 @@
   "game:Generation": "Генерация",
   "game:W": "Вт",
   "game:Consumption": "Потребление",
-  "game:Production": "Производит",
-  "game:Shortage": "Дефицит",
+  "game:Production": "Производится",
+  "game:Request": "Требуется",
 
   "game:Press": "Зажми",
   "game:for details": "для деталей",

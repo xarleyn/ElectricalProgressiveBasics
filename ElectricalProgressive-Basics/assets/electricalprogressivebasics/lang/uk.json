@@ -155,8 +155,8 @@
   "game:Generation": "Генерація",
   "game:W": "Вт",
   "game:Consumption": "Споживання",
-  "game:Production": "Виробляє",
-  "game:Shortage": "Дефіцит",
+  "game:Production": "Виробляється",
+  "game:Request": "Потрібно",
 
   "game:Press": "Утримуйте",
   "game:for details": "для деталей",

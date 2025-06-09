@@ -160,8 +160,8 @@
   "game:Generation": "Génération",
   "game:W": "W",
   "game:Consumption": "Consommation",
-  "game:Production": "Production",
-  "game:Shortage": "Pénurie",
+  "game:Production": "Produit",
+  "game:Request": "Requis",
 
   "game:Press": "Prise",
   "game:for details": "pour plus de détails",

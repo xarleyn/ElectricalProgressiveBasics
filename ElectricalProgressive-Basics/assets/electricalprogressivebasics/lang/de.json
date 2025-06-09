@@ -155,8 +155,8 @@
   "game:Generation": "Erzeugung",
   "game:W": "W",
   "game:Consumption": "Verbrauch",
-  "game:Production": "Erzeugt",
-  "game:Shortage": "Mangel",
+  "game:Production": "Produktion",
+  "game:Request": "Benötigt",
 
   "game:Press": "Drücke",
   "game:for details": "für Details",
