@@ -1,4 +1,4 @@
-using ElectricalProgressive.Content.Block.ECable;
+﻿using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -15,17 +15,18 @@ public class BlockESwitch : BlockEBase
         var face = FacingHelper.FromFace(selection.Face);
 
         if (
-            !(world.BlockAccessor.GetBlockEntity(blockSel.Position) is BlockEntityECable blockEntity &&
-              blockEntity.GetBehavior<BEBehaviorElectricalProgressive>() is { } electricity &&
-              (blockEntity.Switches & face) == 0 &&
-              (electricity.Connection & face) != 0)
+            !(world.BlockAccessor.GetBlockEntity(blockSel.Position) is BlockEntityECable blockEntity &&   //есть ли там провод
+              blockEntity.GetBehavior<BEBehaviorElectricalProgressive>() is { } electricity &&            //поведение єлектричества
+              (blockEntity.Switches & face) == 0 && //на этой грани есть переключатель
+              (electricity.Connection & face) != 0) //провода нет на этой грани
         )
         {
             return false;
         }
 
-        blockEntity.Switches = blockEntity.Switches & ~face | selection.Facing;
-        blockEntity.SwitchesState |= face;
+        blockEntity.Orientation = blockEntity.Orientation & ~face | selection.Facing; //в какую сторону повернут выключатель
+        blockEntity.Switches = blockEntity.Switches & ~face | face;                 //какие направления грани он контролирует
+        blockEntity.SwitchesState |= face;                                              //в какой грани занят выключатель
         blockEntity.MarkDirty(true);
 
         return true;

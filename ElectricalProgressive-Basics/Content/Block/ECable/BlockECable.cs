@@ -319,7 +319,10 @@ namespace ElectricalProgressive.Content.Block.ECable
                 var switchesStackSize = FacingHelper.Faces(selectedSwitches).Count();
                 if (switchesStackSize > 0)
                 {
+                    entity.Orientation &= ~faceSelect;
                     entity.Switches &= ~faceSelect;
+                    
+
                     entity.MarkDirty(true);
 
                     var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
@@ -480,7 +483,9 @@ namespace ElectricalProgressive.Content.Block.ECable
                     world.SpawnItemEntity(itemStack, pos.ToVec3d());
                 }
 
+                entity.Orientation &= ~selectedFacing;
                 entity.Switches &= ~selectedFacing;
+                
             }
 
             if (delayReturn)
@@ -954,11 +959,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                     }
 
                     // Переключатели
-                    if ((key.Switches & Facing.NorthEast) != 0)
+                    if ((key.Orientation & Facing.NorthEast) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -969,11 +974,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.NorthWest) != 0)
+                    if ((key.Orientation & Facing.NorthWest) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -984,11 +989,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.NorthUp) != 0)
+                    if ((key.Orientation & Facing.NorthUp) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -999,11 +1004,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.NorthDown) != 0)
+                    if ((key.Orientation & Facing.NorthDown) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1014,11 +1019,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.EastNorth) != 0)
+                    if ((key.Orientation & Facing.EastNorth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1029,11 +1034,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.EastSouth) != 0)
+                    if ((key.Orientation & Facing.EastSouth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1044,11 +1049,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.EastUp) != 0)
+                    if ((key.Orientation & Facing.EastUp) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1059,11 +1064,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.EastDown) != 0)
+                    if ((key.Orientation & Facing.EastDown) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1074,11 +1079,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.SouthEast) != 0)
+                    if ((key.Orientation & Facing.SouthEast) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1089,11 +1094,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.SouthWest) != 0)
+                    if ((key.Orientation & Facing.SouthWest) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1104,11 +1109,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.SouthUp) != 0)
+                    if ((key.Orientation & Facing.SouthUp) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1119,11 +1124,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.SouthDown) != 0)
+                    if ((key.Orientation & Facing.SouthDown) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1134,11 +1139,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.WestNorth) != 0)
+                    if ((key.Orientation & Facing.WestNorth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1149,11 +1154,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.WestSouth) != 0)
+                    if ((key.Orientation & Facing.WestSouth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1164,11 +1169,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.WestUp) != 0)
+                    if ((key.Orientation & Facing.WestUp) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1179,11 +1184,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.WestDown) != 0)
+                    if ((key.Orientation & Facing.WestDown) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1194,11 +1199,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.UpNorth) != 0)
+                    if ((key.Orientation & Facing.UpNorth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1209,11 +1214,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.UpEast) != 0)
+                    if ((key.Orientation & Facing.UpEast) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1224,11 +1229,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.UpSouth) != 0)
+                    if ((key.Orientation & Facing.UpSouth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1239,11 +1244,11 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.UpWest) != 0)
+                    if ((key.Orientation & Facing.UpWest) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone().Rotate(
                                 origin,
@@ -1254,44 +1259,44 @@ namespace ElectricalProgressive.Content.Block.ECable
                         );
                     }
 
-                    if ((key.Switches & Facing.DownNorth) != 0)
+                    if ((key.Orientation & Facing.DownNorth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone()
                             .Rotate(origin, 0.0f, 180.0f * GameMath.DEG2RAD, 0.0f)
                         );
                     }
 
-                    if ((key.Switches & Facing.DownEast) != 0)
+                    if ((key.Orientation & Facing.DownEast) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone()
                             .Rotate(origin, 0.0f, 90.0f * GameMath.DEG2RAD, 0.0f)
                         );
                     }
 
-                    if ((key.Switches & Facing.DownSouth) != 0)
+                    if ((key.Orientation & Facing.DownSouth) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone()
                             .Rotate(origin, 0.0f, 0.0f * GameMath.DEG2RAD, 0.0f)
                         );
                     }
 
-                    if ((key.Switches & Facing.DownWest) != 0)
+                    if ((key.Orientation & Facing.DownWest) != 0)
                     {
                         AddMeshData(
                             ref meshData,
-                            ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                            ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                                 ? enabledSwitchVariant
                                 : disabledSwitchVariant)?.MeshData?.Clone()
                             .Rotate(origin, 0.0f, 270.0f * GameMath.DEG2RAD, 0.0f)
@@ -1602,120 +1607,120 @@ namespace ElectricalProgressive.Content.Block.ECable
                 Cuboidf[] disabledSwitchBoxes = disabledSwitchVariant?.CollisionBoxes ?? Array.Empty<Cuboidf>();
 
                 // переключатели
-                if ((key.Switches & Facing.NorthEast) != 0)
+                if ((key.Orientation & Facing.NorthEast) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.NorthAll,
-                        ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 90.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.NorthWest) != 0)
+                if ((key.Orientation & Facing.NorthWest) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.NorthAll,
-                        ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 270.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.NorthUp) != 0)
+                if ((key.Orientation & Facing.NorthUp) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.NorthAll,
-                        ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 180.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.NorthDown) != 0)
+                if ((key.Orientation & Facing.NorthDown) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.NorthAll,
-                        ((key.Switches & key.SwitchesState & Facing.NorthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.NorthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 0.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.EastNorth) != 0)
+                if ((key.Orientation & Facing.EastNorth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.EastAll,
-                        ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(180.0f, 0.0f, 90.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.EastSouth) != 0)
+                if ((key.Orientation & Facing.EastSouth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.EastAll,
-                        ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 0.0f, 90.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.EastUp) != 0)
+                if ((key.Orientation & Facing.EastUp) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.EastAll,
-                        ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(270.0f, 0.0f, 90.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.EastDown) != 0)
+                if ((key.Orientation & Facing.EastDown) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.EastAll,
-                        ((key.Switches & key.SwitchesState & Facing.EastAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.EastAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 0.0f, 90.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.SouthEast) != 0)
+                if ((key.Orientation & Facing.SouthEast) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.SouthAll,
-                        ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 90.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.SouthWest) != 0)
+                if ((key.Orientation & Facing.SouthWest) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.SouthAll,
-                        ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes).Select(
                             selectionBox =>
@@ -1724,12 +1729,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     );
                 }
 
-                if ((key.Switches & Facing.SouthUp) != 0)
+                if ((key.Orientation & Facing.SouthUp) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.SouthAll,
-                        ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes).Select(
                             selectionBox =>
@@ -1738,156 +1743,156 @@ namespace ElectricalProgressive.Content.Block.ECable
                     );
                 }
 
-                if ((key.Switches & Facing.SouthDown) != 0)
+                if ((key.Orientation & Facing.SouthDown) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.SouthAll,
-                        ((key.Switches & key.SwitchesState & Facing.SouthAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.SouthAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 0.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.WestNorth) != 0)
+                if ((key.Orientation & Facing.WestNorth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.WestAll,
-                        ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(180.0f, 0.0f, 270.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.WestSouth) != 0)
+                if ((key.Orientation & Facing.WestSouth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.WestAll,
-                        ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 0.0f, 270.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.WestUp) != 0)
+                if ((key.Orientation & Facing.WestUp) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.WestAll,
-                        ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(270.0f, 0.0f, 270.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.WestDown) != 0)
+                if ((key.Orientation & Facing.WestDown) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.WestAll,
-                        ((key.Switches & key.SwitchesState & Facing.WestAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.WestAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(90.0f, 0.0f, 270.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.UpNorth) != 0)
+                if ((key.Orientation & Facing.UpNorth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.UpAll,
-                        ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 180.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.UpEast) != 0)
+                if ((key.Orientation & Facing.UpEast) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.UpAll,
-                        ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 90.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.UpSouth) != 0)
+                if ((key.Orientation & Facing.UpSouth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.UpAll,
-                        ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 0.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.UpWest) != 0)
+                if ((key.Orientation & Facing.UpWest) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.UpAll,
-                        ((key.Switches & key.SwitchesState & Facing.UpAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.UpAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 270.0f, 180.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.DownNorth) != 0)
+                if ((key.Orientation & Facing.DownNorth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.DownAll,
-                        ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 180.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.DownEast) != 0)
+                if ((key.Orientation & Facing.DownEast) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.DownAll,
-                        ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 90.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.DownSouth) != 0)
+                if ((key.Orientation & Facing.DownSouth) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.DownAll,
-                        ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 0.0f, 0.0f, origin)).ToArray()
                     );
                 }
 
-                if ((key.Switches & Facing.DownWest) != 0)
+                if ((key.Orientation & Facing.DownWest) != 0)
                 {
                     AddBoxes(
                         ref boxes,
                         Facing.DownAll,
-                        ((key.Switches & key.SwitchesState & Facing.DownAll) != 0
+                        ((key.Orientation & key.SwitchesState & Facing.DownAll) != 0
                             ? enabledSwitchBoxes
                             : disabledSwitchBoxes)
                         .Select(selectionBox => selectionBox.RotatedCopy(0.0f, 270.0f, 0.0f, origin)).ToArray()
@@ -1955,14 +1960,14 @@ namespace ElectricalProgressive.Content.Block.ECable
         public struct CacheDataKey : IEquatable<CacheDataKey>
         {
             public readonly Facing Connection;
-            public readonly Facing Switches;
             public readonly Facing SwitchesState;
+            public readonly Facing Orientation;
             public readonly EParams[] AllEparams;
 
-            public CacheDataKey(Facing connection, Facing switches, Facing switchesState, EParams[] allEparams)
+            public CacheDataKey(Facing connection, Facing orientation, Facing switchesState, EParams[] allEparams)
             {
                 Connection = connection;
-                Switches = switches;
+                Orientation = orientation;
                 SwitchesState = switchesState;
                 AllEparams = allEparams;
             }
@@ -1972,7 +1977,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                 EParams[] bufAllEparams = entityE.AllEparams.ToArray();
                 return new(
                     entityE.Connection,
-                    entityE.Switches,
+                    entityE.Orientation,
                     entityE.SwitchesState,
                     bufAllEparams
                 );
@@ -1981,7 +1986,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             public bool Equals(CacheDataKey other)
             {
                 if (Connection != other.Connection ||
-                    Switches != other.Switches ||
+                    Orientation != other.Orientation ||
                     SwitchesState != other.SwitchesState ||
                     AllEparams.Length != other.AllEparams.Length)
                     return false;
@@ -2006,7 +2011,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                 {
                     int hash = 17;
                     hash = hash * 31 + Connection.GetHashCode();
-                    hash = hash * 31 + Switches.GetHashCode();
+                    hash = hash * 31 + Orientation.GetHashCode();
                     hash = hash * 31 + SwitchesState.GetHashCode();
                     foreach (var param in AllEparams)
                     {
