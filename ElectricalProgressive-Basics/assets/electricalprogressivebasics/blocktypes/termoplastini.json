@@ -1,0 +1,45 @@
+﻿{
+  "code": "termoplastini",
+  "class": "BlockTermoplastini",
+
+
+
+  "creativeinventory": {
+    "general": [ "*" ],
+    "electricity": [ "*" ]
+  },
+
+
+  "shape": {
+    "base": "block/termoplastini/termoplastini"
+  },
+
+
+  "blockmaterial": "Stone",
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "resistance": 3.5,
+
+  "sounds": {
+    "walk": "game:walk/stone"
+  },
+
+  "heldTpIdleAnimation": "holdbothhandslarge",
+  "heldTpUseAnimation": "twohandplaceblock",
+
+
+  "collisionSelectionBoxes": [
+      {
+        "x1": 0.1,
+        "y1": 0,
+        "z1": 0.1,
+        "x2": 0.9,
+        "y2": 1.0,
+        "z2": 0.9
+      }
+    ]
+  }

@@ -1,0 +1,85 @@
+﻿{
+  "code": "etermogenerator",
+  "class": "BlockETermoGenerator",
+  "entityClass": "BlockEntityETermoGenerator",
+  "behaviors": [
+    { "name": "Container" },
+    {
+      "name": "HorizontalOrientable",
+      "properties": {
+        "dropBlockFace": "south"
+      }
+    }
+  ],
+  "entityBehaviors": [
+    {
+      "name": "BEBehaviorTermoEGenerator"
+    },
+    {
+      "name": "ElectricalProgressive"
+    }
+  ],
+
+  "attributes": {
+    "voltage": 32,
+    "maxCurrent": 1024.0,
+    "isolated": true,
+    "isolatedEnvironment": true
+  },
+
+  "creativeinventory": {
+    "general": [ "*-closed-south" ],
+    "electricity": [ "*-closed-south" ]
+  },
+
+  "variantgroups": [
+    {
+      "code": "state",
+      "states": [ "closed", "open" ]
+    },
+    {
+      "code": "side",
+      "loadFromProperties": "abstract/horizontalorientation"
+    }
+  ],
+  "shapebytype": {
+    "*-north": {
+      "base": "block/termogenerator/termogenerator-{state}",
+      "rotateY": 0
+    },
+    "*-east": {
+      "base": "block/termogenerator/termogenerator-{state}",
+      "rotateY": 270
+    },
+    "*-south": {
+      "base": "block/termogenerator/termogenerator-{state}",
+      "rotateY": 180
+    },
+    "*-west": {
+      "base": "block/termogenerator/termogenerator-{state}",
+      "rotateY": 90
+    }
+  },
+
+  
+
+  "blockmaterial": "Stone",
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "resistance": 3.5,
+  "lightAbsorption": 0,
+  "lightHsvByType": {
+    "*-closed-*": [ 0, 0, 0 ],
+    "*-open-*": [ 7, 7, 11 ]
+  },
+  "sounds": {
+    "walk": "game:walk/stone"
+  },
+
+  "heldTpIdleAnimation": "holdbothhandslarge",
+  "heldTpUseAnimation": "twohandplaceblock"
+}

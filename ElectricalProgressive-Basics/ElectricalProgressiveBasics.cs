@@ -9,6 +9,8 @@ using Vintagestory.API.Client;
 
 using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Content.Block.ETransformator;
+using ElectricalProgressive.Content.Block.ETermoGenerator;
+using ElectricalProgressive.Content.Block.Termoplastini;
 
 
 
@@ -77,6 +79,12 @@ public class ElectricalProgressiveBasics : ModSystem
 
         api.RegisterBlockEntityBehaviorClass("ElectricalProgressive", typeof(BEBehaviorElectricalProgressive));
 
+
+        api.RegisterBlockClass("BlockETermoGenerator", typeof(BlockETermoGenerator));
+        api.RegisterBlockEntityClass("BlockEntityETermoGenerator", typeof(BlockEntityETermoGenerator));
+        api.RegisterBlockEntityBehaviorClass("BEBehaviorTermoEGenerator", typeof(BEBehaviorTermoEGenerator));
+
+        api.RegisterBlockClass("BlockTermoplastini", typeof(BlockTermoplastini));
 
     }
 

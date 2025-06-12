@@ -207,5 +207,12 @@
   "game:No": "Нет",
 
   "game:res_load": "Ном. сопротивление при ном. нагрузке",
-  "game:res_speed": "Ном. сопротивление при ном. скорости"
+  "game:res_speed": "Ном. сопротивление при ном. скорости",
+
+
+  //"game:BlockEInducFurnance": "Индукционная печь",
+  //"game:ecentrifuge": "Электро-Центрифуга",
+  //"game:epress": "Элетро-Пресс",
+  "game:termogen": "Термогенератор",
+  "game:gui-word-seconds": "сек."
 }

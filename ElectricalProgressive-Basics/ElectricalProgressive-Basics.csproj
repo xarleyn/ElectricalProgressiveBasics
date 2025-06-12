@@ -44,6 +44,10 @@
         <Content Include="assets\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Compile Remove="assets\electricalprogressivebasics\textures\block\metal\**" />
+        <Content Remove="assets\electricalprogressivebasics\textures\block\metal\**" />
+        <EmbeddedResource Remove="assets\electricalprogressivebasics\textures\block\metal\**" />
+        <None Remove="assets\electricalprogressivebasics\textures\block\metal\**" />
         <Content Include="modinfo.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -63,7 +67,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="assets\electricalprogressivebasics\shapes\entity\" />
-      <Folder Include="assets\electricalprogressivebasics\textures\block\metal\" />
       <Folder Include="assets\game\itemtypes\resource\" />
     </ItemGroup>
     <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
