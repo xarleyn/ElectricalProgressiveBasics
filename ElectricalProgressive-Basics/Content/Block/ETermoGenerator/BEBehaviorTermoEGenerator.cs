@@ -45,19 +45,18 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
             } entity)
         {
             var hasBurnout = entity.AllEparams.Any(e => e.burnout);
+
             if (hasBurnout)
                 ParticleManager.SpawnBlackSmoke(Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
 
-            /*
-            if (hasBurnout && entity.Block.Variant["type"] != "burned")
-            {
-                var type = "type";
-                var variant = "burned";
 
-                Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant(type, variant)).BlockId, Pos);
+            if (entity.GenTemp > 20 && !hasBurnout)
+            {
+                ParticleManager.SpawnWhiteSmoke(Api.World, Pos.ToVec3d().Add(0.4, entity.heightTermoplastin+0.9, 0.4));
             }
-            */
-        }
+
+
+         }
 
         //Blockentity.MarkDirty(true); //обновлять здесь уже лишнее
     }

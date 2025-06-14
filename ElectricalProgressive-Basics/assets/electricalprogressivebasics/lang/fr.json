@@ -197,5 +197,17 @@
   "game:No": "Non",
 
   "game:res_load": "Résistance nominale à la charge nominale",
-  "game:res_speed": "Résistance nominale à la vitesse nominale"
+  "game:res_speed": "Résistance nominale à la vitesse nominale",
+
+  "game:termogen": "Thermogénérateur",
+  "game:gui-word-seconds": "sec.",
+
+  "block-etermogenerator-*": "Générateur thermoélectrique",
+  "block-handbooktitle-etermogenerator": "Utilisation",
+  "block-handbooktext-etermogenerator": "Convertit la chaleur en énergie électrique ! Fonctionne avec tout combustible inflammable. Plus la température de combustion est élevée, plus la puissance de sortie est importante. La puissance dépend aussi légèrement de la température ambiante : plus l’air est froid, plus l’énergie produite augmente. Nécessite des <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">plaques thermoélectriques</a> au-dessus pour fonctionner.<br><br>Peut être alimenté automatiquement par des entonnoirs.",
+
+  "block-termoplastini": "Plaques thermoélectriques",
+  "block-handbooktitle-termoplastini": "Utilisation",
+  "block-handbooktext-termoplastini": "Les plaques thermoélectriques sont utilisées dans les générateurs thermoélectriques pour convertir la chaleur en électricité. Elles fonctionnent grâce à la force électromotrice thermique créée à la jonction de deux métaux différents. L’écart de température est dû à la fumée chaude du combustible d’un côté et à l’air ambiant frais de l’autre.<br><br>Se placent sur le <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">générateur thermoélectrique</a>, jusqu’à 10 plaques. Chaque plaque supplémentaire apporte un gain de puissance décroissant. Dix plaques fournissent 100 % de la puissance. Note : les blocs adjacents empêchent le refroidissement et réduisent l’efficacité globale."
+
 }

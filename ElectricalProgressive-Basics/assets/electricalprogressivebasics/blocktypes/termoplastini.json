@@ -2,12 +2,23 @@
   "code": "termoplastini",
   "class": "BlockTermoplastini",
 
-
-
   "creativeinventory": {
     "general": [ "*" ],
     "electricity": [ "*" ]
   },
+
+  "attributes": {
+    "handbook": {
+      "groupBy": [ "termoplastini-*" ],
+      "extraSections": [
+        {
+          "title": "electricalprogressivebasics:block-handbooktitle-termoplastini",
+          "text": "electricalprogressivebasics:block-handbooktext-termoplastini"
+        }
+      ]
+    }
+  },
+
 
 
   "shape": {
@@ -41,5 +52,5 @@
       "y2": 1.0,
       "z2": 1.0
     }
-    ]
-  }
+  ]
+}

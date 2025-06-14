@@ -79,7 +79,6 @@ namespace ElectricalProgressive.Content.Block.ECable
             BlockECable.CollisionBoxesCache.Clear();
             BlockECable.SelectionBoxesCache.Clear();
             BlockECable.MeshDataCache.Clear();
-
         }
 
         public override bool IsReplacableBy(Vintagestory.API.Common.Block block)

@@ -310,7 +310,7 @@ public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
                     meshData.Rotate(origin, 0.0f, 90.0f * GameMath.DEG2RAD, 0.0f);
                 }
 
-                MeshData.Add((facing, code), meshData);
+                MeshData.TryAdd((facing, code), meshData);
             }
 
             sourceMesh = meshData;

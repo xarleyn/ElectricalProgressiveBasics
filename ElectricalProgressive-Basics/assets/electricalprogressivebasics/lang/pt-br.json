@@ -197,5 +197,17 @@
   "game:No": "Não",
 
   "game:res_load": "Resistência nominal sob carga nominal",
-  "game:res_speed": "Resistência nominal sob velocidade nominal"
+  "game:res_speed": "Resistência nominal sob velocidade nominal",
+
+  "game:termogen": "Termogerador",
+  "game:gui-word-seconds": "seg.",
+
+  "block-etermogenerator-*": "Gerador Termoelétrico",
+  "block-handbooktitle-etermogenerator": "Uso",
+  "block-handbooktext-etermogenerator": "Converte calor em energia elétrica! Funciona com qualquer combustível inflamável. Quanto maior a temperatura de queima, maior a potência de saída. A potência também varia levemente conforme a temperatura ambiente: quanto mais fria o ar, mais energia é gerada. Requer <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">placas termoelétricas</a> instaladas no topo.<br><br>Pode ser abastecido automaticamente com funis.",
+
+  "block-termoplastini": "Placas Termoelétricas",
+  "block-handbooktitle-termoplastini": "Uso",
+  "block-handbooktext-termoplastini": "As placas termoelétricas são usadas em geradores termoelétricos para converter calor em eletricidade. Funcionam pela geração de força eletromotriz térmica na junção de dois metais diferentes. A diferença de temperatura vem da fumaça quente do combustível de um lado e do ar ambiente frio do outro.<br><br>Coloque sobre o <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">gerador termoelétrico</a>, até 10 placas. Cada placa adicional oferece ganho de potência decrescente. Dez placas fornecem 100 % da potência. Atenção: blocos encostados diretamente nas placas reduzem o resfriamento e diminuem a eficiência."
+
 }

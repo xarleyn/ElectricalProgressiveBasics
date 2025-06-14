@@ -2,6 +2,7 @@
 using ElectricalProgressive.Content.Block.EGenerator;
 using ElectricalProgressive.Content.Block.EMotor;
 using ElectricalProgressive.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,24 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.ETermoGenerator;
 
 public class BlockETermoGenerator : BlockEBase
 {
+
+    WorldInteraction[] interactions;
+
+    public override void OnUnloaded(ICoreAPI api)
+    {
+        base.OnUnloaded(api);
+        
+    }
+
+
+
     public override bool CanAttachBlockAt(IBlockAccessor blockAccessor, Vintagestory.API.Common.Block block, BlockPos pos,
         BlockFacing blockFace, Cuboidi attachmentArea = null)
     {
@@ -63,7 +76,14 @@ public class BlockETermoGenerator : BlockEBase
 
 
 
-    //ставим блок
+    /// <summary>
+    /// ставим блок
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="byPlayer"></param>
+    /// <param name="blockSel"></param>
+    /// <param name="byItemStack"></param>
+    /// <returns></returns>
     public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel,
         ItemStack byItemStack)
     {
@@ -91,7 +111,7 @@ public class BlockETermoGenerator : BlockEBase
             world.BlockAccessor.GetBlockEntity(blockSel.Position) is BlockEntityETermoGenerator entity
         )
         {
-            entity.Facing = facing;                             //сообщаем направление
+            entity.Facing = facing;    //сообщаем направление
 
             //задаем параметры блока/проводника
             var voltage = MyMiniLib.GetAttributeInt(this, "voltage", 32);
@@ -147,54 +167,25 @@ public class BlockETermoGenerator : BlockEBase
     }
 
 
-    private static void AddMeshData(ref MeshData? sourceMesh, MeshData? meshData)
+
+    /// <summary>
+    /// Получение подсказок для взаимодействия с блоком
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="selection"></param>
+    /// <param name="forPlayer"></param>
+    /// <returns></returns>
+    public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
     {
-        if (meshData != null)
+        return new WorldInteraction[]
         {
-            if (sourceMesh != null)
-            {
-                sourceMesh.AddMeshData(meshData);
-            }
-            else
-            {
-                sourceMesh = meshData;
-            }
-        }
+                new WorldInteraction()
+                {
+                    ActionLangCode = "blockhelp-door-openclose",
+                    MouseButton = EnumMouseButton.Right
+                }
+        }.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
     }
-
-
-
-
-
-    public override void OnJsonTesselation(ref MeshData sourceMesh, ref int[] lightRgbsByCorner, BlockPos pos,
-    Vintagestory.API.Common.Block[] chunkExtBlocks, int extIndex3d)
-    {
-        base.OnJsonTesselation(ref sourceMesh, ref lightRgbsByCorner, pos, chunkExtBlocks, extIndex3d);
-
-        if (this.api is ICoreClientAPI clientApi &&
-            this.api.World.BlockAccessor.GetBlockEntity(pos) is BlockEntityETermoGenerator entity &&
-            entity.Facing != Facing.None
-           )
-        {
-            var stack = entity.Inventory[0].Itemstack;
-
-            if (stack != null && stack.Collectible.CombustibleProps != null)
-            {
-                // смотрим сколько топлива в генераторе
-                int size = (int)(stack.StackSize*8.0F / stack.Collectible.MaxStackSize);
-
-                MeshData myMesh;
-                clientApi.Tesselator.TesselateShape(this, Vintagestory.API.Common.Shape.TryGet(api, "electricalprogressivebasics:shapes/block/termogenerator/toplivo/toplivo-"+ size+".json"), out myMesh);
-
-                clientApi.TesselatorManager.ThreadDispose(); //обязательно?
-
-                AddMeshData(ref sourceMesh, myMesh);
-            }
-
-
-        }
-    }
-
 
 
 
@@ -211,7 +202,6 @@ public class BlockETermoGenerator : BlockEBase
     {
         base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
         dsc.AppendLine(Lang.Get("Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
-        dsc.AppendLine(Lang.Get("Consumption") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "maxConsumption", 0) + " " + Lang.Get("W"));
         dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false)) ? Lang.Get("Yes") : Lang.Get("No")));
     }
 }

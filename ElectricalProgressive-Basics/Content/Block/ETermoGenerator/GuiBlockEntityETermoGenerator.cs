@@ -118,14 +118,18 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
     }
 
 
-
+    /// <summary>
+    /// Обновление диалога
+    /// </summary>
+    /// <param name="gentemp"></param>
+    /// <param name="burntime"></param>
     public void Update(float gentemp, float burntime)
     {
         if (!this.IsOpened())
             return;
 
         _gentemp = gentemp;
-        string newText = $"{gentemp:N1}°C{System.Environment.NewLine}{burntime:N1} {Lang.Get("gui-word-seconds")}{System.Environment.NewLine}{System.Environment.NewLine}";
+        string newText = (int)gentemp+" °C"+System.Environment.NewLine+(int)burntime+" "+Lang.Get("gui-word-seconds")+System.Environment.NewLine;
         if (this.SingleComposer != null)
         {
             base.SingleComposer.GetDynamicText("outputText").SetNewText(newText);
@@ -145,7 +149,7 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
         base.OnGuiOpened();
         base.Inventory.SlotModified += this.OnSlotModified;
 
-
+        betestgen.OpenLid(); //открываем крышку генератора при открытии диалога
     }
 
     public override void OnGuiClosed()
@@ -154,6 +158,6 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
         base.SingleComposer.GetSlotGrid("inputSlot").OnGuiClosed(this.capi);
         base.OnGuiClosed();
 
-
+        betestgen.CloseLid(); //закрываем крышку генератора при закрытии диалога
     }
 }

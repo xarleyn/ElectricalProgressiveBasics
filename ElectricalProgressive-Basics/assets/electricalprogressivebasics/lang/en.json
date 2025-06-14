@@ -199,5 +199,17 @@
   "game:No": "No",
 
   "game:res_load": "Nominal resistance at nominal load",
-  "game:res_speed": "Nominal resistance at nominal speed"
+  "game:res_speed": "Nominal resistance at nominal speed",
+
+  "game:termogen": "Thermo Generator",
+  "game:gui-word-seconds": "sec.",
+
+  "block-etermogenerator-*": "Thermoelectric Generator",
+  "block-handbooktitle-etermogenerator": "Usage",
+  "block-handbooktext-etermogenerator": "Converts heat into electrical energy! Works with any burnable fuel. The higher the fuel’s burn temperature, the greater the output power. Output also varies slightly with ambient temperature: the colder the air around it, the more energy it produces. Must be fitted with <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">thermoelectric plates</a> on top to function.<br><br>Can be fed fuel automatically via hoppers.",
+
+  "block-termoplastini": "Thermoelectric Plates",
+  "block-handbooktitle-termoplastini": "Usage",
+  "block-handbooktext-termoplastini": "Thermoelectric plates are used in thermoelectric generators to convert heat into electricity. They work by generating a thermal electromotive force at the junction of two dissimilar metals. One side is heated by combustion smoke, the other cooled by ambient air.<br><br>Place on top of a <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">thermoelectric generator</a>, up to 10 plates. Each additional plate yields diminishing returns. Ten plates provide 100% generator output. Note: any blocks placed directly against the plates will reduce overall efficiency, as they block airflow and cooling."
+
 }

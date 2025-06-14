@@ -313,7 +313,7 @@ public class BlockEMotor : BlockEBase, IMechanicalPowerBlock
                     meshData.Rotate(origin, 0.0f, 90.0f * GameMath.DEG2RAD, 0.0f);
                 }
 
-                BlockEMotor.MeshData.Add((facing, code), meshData);
+                BlockEMotor.MeshData.TryAdd((facing, code), meshData);
             }
 
             sourceMesh = meshData;

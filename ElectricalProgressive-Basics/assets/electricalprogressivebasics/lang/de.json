@@ -192,5 +192,17 @@
   "game:No": "Nein",
 
   "game:res_load": "Nennwiderstand bei Nennbelastung",
-  "game:res_speed": "Nennwiderstand bei Nenngeschwindigkeit"
+  "game:res_speed": "Nennwiderstand bei Nenngeschwindigkeit",
+
+  "game:termogen": "Thermogenerator",
+  "game:gui-word-seconds": "Sek.",
+
+  "block-etermogenerator-*": "Thermoelektrischer Generator",
+  "block-handbooktitle-etermogenerator": "Verwendung",
+  "block-handbooktext-etermogenerator": "Wandelt thermische Energie in elektrische Energie um! Funktioniert mit allen brennbaren Materialien. Je höher die Verbrennungstemperatur des Brennstoffs, desto größer die Ausgangsleistung. Die Leistung variiert auch leicht mit der Umgebungstemperatur: Je kälter die Luft, desto mehr Energie wird erzeugt. Benötigt <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">thermoelektrische Platten</a> oben, um zu funktionieren.<br><br>Kann automatisch über Trichter mit Brennstoff versorgt werden.",
+
+  "block-termoplastini": "Thermoelektrische Platten",
+  "block-handbooktitle-termoplastini": "Verwendung",
+  "block-handbooktext-termoplastini": "Thermoelektrische Platten werden in thermoelektrischen Generatoren eingesetzt, um Hitze in Strom umzuwandeln. Sie erzeugen eine thermische Spannung an der Kontaktstelle zweier unterschiedlicher Metalle. Eine Seite wird durch Rauch des brennenden Brennstoffs erhitzt, die andere durch die Umgebungsluft gekühlt.<br><br>Auf dem <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">thermoelektrischen Generator</a> platzieren, bis zu 10 Stück. Jede weitere Platte bringt weniger Leistungszuwachs. Zehn Platten ergeben insgesamt 100 % Generatorleistung. Beachte: Blöcke, die direkt an die Platten angrenzen, mindern ihre Kühlung und senken dadurch den Wirkungsgrad."
+
 }

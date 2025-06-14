@@ -13,6 +13,9 @@
   ],
   "entityBehaviors": [
     {
+      "name": "Animatable"
+    },
+    {
       "name": "BEBehaviorTermoEGenerator"
     },
     {
@@ -25,44 +28,53 @@
     "maxCurrent": 1024.0,
     "isolated": true,
     "isolatedEnvironment": true,
-    "maxHeat": 10.0 // достигает при 1300 градусах
+    "maxHeat": 10.0, // достигает при 1300 градусах
+    "handbook": {
+      "groupBy": [ "etermogenerator-*" ],
+      "extraSections": [
+        {
+          "title": "electricalprogressivebasics:block-handbooktitle-etermogenerator",
+          "text": "electricalprogressivebasics:block-handbooktext-etermogenerator"
+        }
+      ]
+    }
   },
 
   "creativeinventory": {
-    "general": [ "*-closed-south" ],
-    "electricity": [ "*-closed-south" ]
+    "general": [ "*-south" ],
+    "electricity": [ "*-south" ]
   },
 
   "variantgroups": [
-    {
-      "code": "state",
-      "states": [ "closed", "open" ]
-    },
     {
       "code": "side",
       "loadFromProperties": "abstract/horizontalorientation"
     }
   ],
+
+
+
+
   "shapebytype": {
     "*-north": {
-      "base": "block/termogenerator/termogenerator-{state}",
+      "base": "block/termogenerator/termogenerator",
       "rotateY": 0
     },
     "*-east": {
-      "base": "block/termogenerator/termogenerator-{state}",
+      "base": "block/termogenerator/termogenerator",
       "rotateY": 270
     },
     "*-south": {
-      "base": "block/termogenerator/termogenerator-{state}",
+      "base": "block/termogenerator/termogenerator",
       "rotateY": 180
     },
     "*-west": {
-      "base": "block/termogenerator/termogenerator-{state}",
+      "base": "block/termogenerator/termogenerator",
       "rotateY": 90
     }
   },
 
-  
+
 
   "blockmaterial": "Stone",
   "sidesolid": {
@@ -73,10 +85,7 @@
   },
   "resistance": 3.5,
   "lightAbsorption": 0,
-  "lightHsvByType": {
-    "*-closed-*": [ 0, 0, 0 ],
-    "*-open-*": [ 7, 7, 11 ]
-  },
+
   "sounds": {
     "walk": "game:walk/stone"
   },
