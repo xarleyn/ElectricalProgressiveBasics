@@ -268,7 +268,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
             // инициализируем аниматор
             if (animUtil != null)
             {
-                animUtil.InitializeAnimator("termogen", null, null, new Vec3f(0, GetRotation(), 0f));
+                animUtil.InitializeAnimator(InventoryClassName, null, null, new Vec3f(0, GetRotation(), 0f));
             }
 
         }
@@ -380,16 +380,8 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <returns></returns>
     public override bool OnTesselation(ITerrainMeshPool mesher, ITesselatorAPI tesselator)
     {
-        // если анимация открыта, то не рисуем блок
-        if (animUtil?.activeAnimationsByAnimCode.ContainsKey("open") == false)
-        {
-            var block = Api.World.BlockAccessor.GetBlock(Pos);
-            var mesh = capi.TesselatorManager.GetDefaultBlockMesh(block);
-            if (mesh == null)
-                return true;
+        base.OnTesselation(mesher, tesselator); // вызываем базовую логику тесселяции
 
-            mesher.AddMeshData(mesh);
-        }
 
         var stack = Inventory[0].Itemstack;
         int sizeFuel = 0; // размер топлива в генераторе
@@ -419,7 +411,15 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
             mesher.AddMeshData(fuelMesh);
         }
 
-        return true;
+
+        // если анимации нет, то рисуем блок базовый
+        if (animUtil?.activeAnimationsByAnimCode.ContainsKey("open") == false)
+        {
+            return false;
+        }
+
+
+        return true;  // не рисует базовый блок, если есть анимация
     }
 
     /// <summary>

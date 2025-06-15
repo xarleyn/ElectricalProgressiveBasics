@@ -82,7 +82,10 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
             .Compose(true);
     }
 
-
+    /// <summary>
+    /// Отправка пакета на сервер для обновления инвентаря
+    /// </summary>
+    /// <param name="packet"></param>
     private void SendInvPacket(object packet)
     {
         this.capi.Network.SendBlockEntityPacket(BlockEntityPosition.X, BlockEntityPosition.Y, BlockEntityPosition.Z,
