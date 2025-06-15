@@ -71,7 +71,7 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
             entity = temp;
             if (temp.GenTemp > 20)
             {
-                PowerGive = Math.Min(PowerOrder, temp.Power);
+                PowerGive = temp.Power;
             }
             else
                 PowerGive = 0;
